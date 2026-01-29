@@ -29,14 +29,13 @@ export default function EditarLiquidacionView() {
         enabled: !!liquidacionId
     })
 
-    const {register, handleSubmit, formState: { errors }, reset} = useForm<LiquidacionFormData>()
+    const {register, handleSubmit, getValues, formState: { errors }, reset} = useForm<LiquidacionFormData>()
     useEffect(() => {
         if (liquidacion) {
             reset({
                 fecha_fin: liquidacion.fecha_fin,
                 fecha_llegada: liquidacion.fecha_llegada,
                 fecha_inicio: liquidacion.fecha_inicio,
-                rendimiento: liquidacion.rendimiento,
                 kilometros_recorridos: liquidacion.kilometros_recorridos,
                 folio_liquidacion: liquidacion.folio_liquidacion,
                 cliente: liquidacion.cliente,
@@ -108,6 +107,7 @@ export default function EditarLiquidacionView() {
                 <LiquidacionForm
                     register={register}
                     errors={errors}
+                    getValues={getValues}
                     unidades={unidades}
                     operadores={operadores}
                 />

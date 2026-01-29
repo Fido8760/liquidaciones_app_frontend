@@ -56,6 +56,45 @@ export default function CostoFleteForm({ register, errors }: CostoFleteFormProps
                     />
                     {errors.descripcion && <ErrorMessage>{errors.descripcion.message}</ErrorMessage>}
                 </div>
+
+                <div>
+                    <label
+                        htmlFor="origen"
+                        className="block font-medium text-gray-700 dark:text-gray-200 mb-1"
+                    >
+                        Origen
+                    </label>
+                    <input
+                        id="origen"
+                        type="text"
+                        placeholder="Ej. México"
+                        className={inputStyles}
+                        {...register("origen", {
+                            required: "El origen es obligatorio",
+                        })}
+                    />
+                    {errors.origen && <ErrorMessage>{errors.origen.message}</ErrorMessage>}
+                </div>
+
+                <div>
+                    <label
+                        htmlFor="destino"
+                        className="block font-medium text-gray-700 dark:text-gray-200 mb-1"
+                    >
+                        Destino
+                    </label>
+                    <input
+                        id="Destino"
+                        type="text"
+                        placeholder="Ej. Monterrey"
+                        className={inputStyles}
+                        {...register("destino", {
+                            required: "El destino es obligatorio",
+                        })}
+                    />
+                    {errors.destino && <ErrorMessage>{errors.destino.message}</ErrorMessage>}
+                </div>
+
             </div>
         </fieldset>
     )

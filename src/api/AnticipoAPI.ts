@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../lib/axios"
-import { anticipoResponseSchema, type AnticipoFormData } from "../types"
+import { anticipoSchema, type AnticipoFormData } from "../types"
 
 export async function createAnticipo(formData: AnticipoFormData) {
     try {
@@ -25,7 +25,7 @@ export async function getAnticipoById(anticipoId: number) {
     try {
         const url = `/anticipos/${anticipoId}`
         const { data } = await api(url)
-        const response = anticipoResponseSchema.safeParse(data)
+        const response = anticipoSchema.safeParse(data)
         if( response.success ) {
             return response.data
         }

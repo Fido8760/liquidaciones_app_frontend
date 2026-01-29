@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { gastoCasetaResponseSchema, type GastoCasetaFormData } from "../types";
+import { gastoCasetaSchema, type GastoCasetaFormData } from "../types";
 import imageCompression from 'browser-image-compression';
 
 export async function createGastoCaseta(formData: FormData): Promise<GastoCasetaFormData> {
@@ -24,7 +24,7 @@ export async function getCasetaById(casetaId: number) {
     const url = `/gasto-casetas/${casetaId}`
     try {
         const { data } = await api(url)
-        const response = gastoCasetaResponseSchema.safeParse(data)
+        const response = gastoCasetaSchema.safeParse(data)
         if( response.success) {
             return response.data
         }

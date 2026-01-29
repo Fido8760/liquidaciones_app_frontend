@@ -2,7 +2,7 @@ import { isAxiosError } from "axios";
 import api from "../lib/axios";
 import imageCompression from 'browser-image-compression';
 
-import { gastoVariosResponseSchema, type GastoVarioFormData } from "../types";
+import { gastoVarioSchema, type GastoVarioFormData } from "../types";
 
 export async function createGastoVarios(formData: FormData): Promise<GastoVarioFormData> {
     try {
@@ -27,7 +27,7 @@ export async function getVariosById(variosId: number) {
     try {
 
         const { data } = await api(url)
-        const response = gastoVariosResponseSchema.safeParse(data)
+        const response = gastoVarioSchema.safeParse(data)
         if (response.success) {
             return response.data
         }

@@ -80,6 +80,18 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
                   </span>{" "}
                   {costo.descripcion}
                 </p>
+                <p className="dark:text-white">
+                  <span className="font-medium dark:text-gray-300">
+                    Origen:
+                  </span>{" "}
+                  {costo.origen}
+                </p>
+                <p className="dark:text-white">
+                  <span className="font-medium dark:text-gray-300">
+                    Destino:
+                  </span>{" "}
+                  {costo.destino}
+                </p>
               </div>
               <div className="flex-shrink-0 flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
                 {canEdit && (

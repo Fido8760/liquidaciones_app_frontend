@@ -1,4 +1,4 @@
-import type { UseFormRegister, FieldErrors } from 'react-hook-form';
+import type { UseFormRegister, FieldErrors, UseFormGetValues } from 'react-hook-form';
 import type { LiquidacionFormData, Operadores, Unidades } from '../../types';
 import FormField from './FormFields';
 
@@ -7,11 +7,12 @@ const inputStyles = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-s
 type LiquidacionFormProps = {
     errors: FieldErrors<LiquidacionFormData>;
     register: UseFormRegister<LiquidacionFormData>;
+    getValues: UseFormGetValues<LiquidacionFormData>
     unidades: Unidades; 
     operadores: Operadores;
 }
 
-export default function LiquidacionForm({ errors, register, unidades, operadores }: LiquidacionFormProps) {
+export default function LiquidacionForm({ errors, register, getValues,unidades, operadores }: LiquidacionFormProps) {
     return (
         <div className="space-y-8">
             {/* GRUPO 1: DATOS GENERALES */}
@@ -66,21 +67,37 @@ export default function LiquidacionForm({ errors, register, unidades, operadores
             <fieldset className="p-4 border dark:border-gray-700 rounded-lg">
                 <legend className="px-2 text-base font-semibold text-gray-800 dark:text-gray-200">Fechas y Métricas</legend>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mt-2">
+
                     <FormField label="Fecha de Inicio" htmlFor="fecha_inicio" error={errors.fecha_inicio} required>
-                        <input id="fecha_inicio" type="date" className={inputStyles} {...register("fecha_inicio", { required: "La fecha de inicio es obligatoria" })} />
+                        <input 
+                            id="fecha_inicio" 
+                            type="date" 
+                            className={inputStyles} 
+                            {...register("fecha_inicio", { required: "La fecha de inicio es obligatoria" })} 
+                        />
+                    </FormField>
+                    
+
+                    <FormField label="Fecha de Llegada" htmlFor="fecha_llegada" error={errors.fecha_llegada} required>
+                        <input 
+                            id="fecha_llegada" 
+                            type="date" 
+                            className={inputStyles} 
+                            {...register("fecha_llegada", { 
+                                required: "La fecha de llegada es obligatoria",
+                                validate: (value) => value >= getValues('fecha_inicio') || "La fecha de llegada no puede ser anterior al inicio"
+                            })} />
                     </FormField>
                     
                     <FormField label="Fecha de Fin" htmlFor="fecha_fin" error={errors.fecha_fin} required>
-                        <input id="fecha_fin" type="date" className={inputStyles} {...register("fecha_fin", { required: "La fecha de fin es obligatoria" })} />
-                    </FormField>
-
-                    <FormField label="Fecha de Llegada" htmlFor="fecha_llegada" error={errors.fecha_llegada} required>
-                        <input id="fecha_llegada" type="date" className={inputStyles} {...register("fecha_llegada", { required: "La fecha de llegada es obligatoria" })} />
-                    </FormField>
-                    
-                    {/* Hacemos que estos ocupen más espacio si es necesario */}
-                    <FormField label="Rendimiento (Km/L)" htmlFor="rendimiento" error={errors.rendimiento} required>
-                        <input id="rendimiento" type="number" step="0.01" className={inputStyles} {...register("rendimiento", { required: "El rendimiento es obligatorio", valueAsNumber: true })} />
+                        <input 
+                            id="fecha_fin" 
+                            type="date" 
+                            className={inputStyles} 
+                            {...register("fecha_fin", { 
+                                required: "La fecha de fin es obligatoria",
+                                validate: (value) => value >= getValues('fecha_inicio') || "La fecha de fin no puede ser anterior al inicio"
+                            })} />
                     </FormField>
 
                     <FormField label="Kilómetros Recorridos" htmlFor="kilometros_recorridos" error={errors.kilometros_recorridos} required>

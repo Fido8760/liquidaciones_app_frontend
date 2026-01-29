@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../lib/axios"
-import { deduccionResponseSchema, type DeduccionFormData } from "../types"
+import { deduccionSchema, type DeduccionFormData } from "../types"
 
 export async function createDeduccion(formData: DeduccionFormData) {
     try {
@@ -24,7 +24,7 @@ export const getDeduccionById = async (deduccionId : number ) => {
     const url = `/deduccion-flete/${deduccionId}`
     try {
         const { data } = await api(url)
-        const response =  deduccionResponseSchema.safeParse(data)
+        const response =  deduccionSchema.safeParse(data)
         if (response.success) {
             return response.data
         }

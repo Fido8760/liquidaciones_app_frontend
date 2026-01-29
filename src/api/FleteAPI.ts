@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { costoFleteResponseSchema, type CostoFleteFormData } from "../types";
+import { costoFleteSchema, type CostoFleteFormData } from "../types";
 
 export async function createCostoflete(formData: CostoFleteFormData) {
     try {
@@ -23,7 +23,7 @@ export async function getCostoFleteById(costoId: number) {
     const url = `/costo-fletes/${costoId}`
     try {
         const { data } = await api(url)
-        const response = costoFleteResponseSchema.safeParse(data)
+        const response = costoFleteSchema.safeParse(data)
         if( response.success ) {
             return response.data
         }

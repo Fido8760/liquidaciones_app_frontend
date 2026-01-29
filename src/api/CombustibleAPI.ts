@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { gastoCombustibleResponseSchema, type GastoCombustible, type GastoCombustibleFormData } from "../types";
+import { gastoCombustibleSchema, type GastoCombustible, type GastoCombustibleFormData } from "../types";
 import imageCompression from 'browser-image-compression';
 
 export async function createGastoCombustible(formData: FormData): Promise<GastoCombustible> {
@@ -25,7 +25,7 @@ export async function getCombustiblebyId(combustibleId: number) {
     
     try {
         const { data } = await api(url)
-        const response = gastoCombustibleResponseSchema.safeParse(data)
+        const response = gastoCombustibleSchema.safeParse(data)
         if( response.success ) {
             return response.data
         }

@@ -14,12 +14,12 @@ export default function CrearLiquidacionView() {
         fecha_fin: "",
         fecha_llegada: "",
         fecha_inicio: "",
-        rendimiento: 0,
         kilometros_recorridos: 0,
         cliente: "",
         unidadId: 0,
         operadorId: 0,
-        folio_liquidacion: ""
+        folio_liquidacion: "",
+        rendimiento_tabulado: 0
     }
 
     const { data: unidades, isLoading: isUnidadesLoading } = useQuery({
@@ -48,7 +48,7 @@ export default function CrearLiquidacionView() {
         }
     }) 
 
-    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues });
+    const { register, handleSubmit, getValues,formState: { errors } } = useForm({ defaultValues: initialValues });
     const handleForm = (formData: LiquidacionFormData) => mutate(formData);
     
     // 3. ESTADO DE CARGA UNIFICADO Y PROFESIONAL (SKELETON)
@@ -91,6 +91,7 @@ export default function CrearLiquidacionView() {
                 <LiquidacionForm
                     register={register}
                     errors={errors}
+                    getValues={getValues}
                     unidades={unidades}
                     operadores={operadores}
                 />

@@ -21,7 +21,7 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose, }: Modal
   const queryClient = useQueryClient();
 
   const initialValues: AjustarFormData = {
-    rendimiento_ajustado: liquidacion.rendimiento_ajustado || 0,
+    rendimiento_tabulado: liquidacion.rendimiento_tabulado || 0,
     comision_porcentaje: liquidacion.comision_porcentaje || 0,
     ajuste_manual: liquidacion.ajuste_manual || 0,
     motivo_ajuste: liquidacion.motivo_ajuste || "",
@@ -115,7 +115,7 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose, }: Modal
                   <div className=" grid grid-cols-3 gap-4 text-sm">
                     <div>
                       <p className=" text-gray-600 dark:text-gray-400">Rendimiento</p>
-                      <p className=" font-bold text-blue-700 dark:text-blue-400">{liquidacion.rendimiento.toFixed(2)} km/l</p>
+                      <p className=" font-bold text-blue-700 dark:text-blue-400">{liquidacion.rendimiento_real!} km/l</p>
                     </div>
                     <div>
                       <p className=" text-gray-600 dark:text-gray-400">Utilidad Bruta</p>
@@ -137,22 +137,22 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose, }: Modal
 
                         {/* Rendimiento Ajustado */}
                         <div>
-                          <label htmlFor="rendimiento_ajustado" className={labelStyles} >
-                            Rendimiento Ajustado (km/l) *
+                          <label htmlFor="rendimiento_tabulado" className={labelStyles} >
+                            Rendimiento Tabulado (km/l) *
                           </label>
                           <input
                             type="number"
                             step="0.01"
-                            id="rendimiento_ajustado"
+                            id="rendimiento_tabulado"
                             className={inputStyles}
                             placeholder="4.50"
-                            {...register("rendimiento_ajustado", {
+                            {...register("rendimiento_tabulado", {
                               required: "El rendimiento es obligatorio",
                               min: {value: 0.1, message: "Debe ser mayor a 0" },
                               valueAsNumber: true,
                             })}
                           />
-                          <ErrorMessage>{errors.rendimiento_ajustado?.message}</ErrorMessage>
+                          <ErrorMessage>{errors.rendimiento_tabulado?.message}</ErrorMessage>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             Se considera para evaluación del operador
                           </p>
