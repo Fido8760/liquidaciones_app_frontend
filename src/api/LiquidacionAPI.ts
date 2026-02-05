@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../lib/axios";
-import { liquidacionesSchema, liquidacionSchema, operadoresSchema, unidadesSchema, type AjustarFormData, type Liquidacion, type LiquidacionFormData } from "../types";
+import { liquidacionesSchema, liquidacionSchema, operadoresSchema, unidadesSchema, type AjustarFormData, type Liquidacion, type LiquidacionFormData, type ModificarTotalFormData } from "../types";
 
 
 export async function getUnidades() {
@@ -205,5 +205,27 @@ export async function ajusteLiquidacion({formData, liquidacionId}: AjusteLiquida
     }
 }
 
+type ModificarTotalPagoParams = {
+    liquidacionId: number;
+    formData: ModificarTotalFormData;
+};
+
+export async function modificarTotalPago({ liquidacionId, formData }: ModificarTotalPagoParams) {
+    try {
+        const { data } = await api.patch<{ message: string }>(
+            `/liquidaciones/${liquidacionId}/modificar-total-pago`,
+            formData
+        );
+        return data;
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            const errorData = error.response.data as { message: string };
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+    throw new Error("Error al modificar el total del pago");
+    
+    }
+}
 
 

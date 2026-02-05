@@ -211,12 +211,14 @@ export const liquidacionSchema = z.object({
     usuario_editor: userSchema.nullable().optional(),
     usuario_aprobador: userSchema.nullable().optional(),
     usuario_pagador: userSchema.nullable().optional(),
+    usuario_modificador_total: userSchema.nullable().optional(),
     folio_liquidacion: z.string(),
     cliente: z.string(),
     fecha_inicio: z.string(),
     fecha_fin: z.string(),
     fecha_llegada: z.string(),
     fecha_pago: z.string().nullable().optional(),
+    fecha_modificacion_total: z.string().nullable().optional(), 
     kilometros_recorridos: z.string().transform(Number),
     rendimiento_tabulado: z.string().transform(Number),
     rendimiento_real: z.string().transform(Number).nullable(),
@@ -229,7 +231,9 @@ export const liquidacionSchema = z.object({
     total_gastos_varios: z.string().transform(Number),
     total_deducciones_comerciales: z.string().transform(Number),
     total_bruto: z.string().transform(Number),
+    total_neto_sugerido: z.string().transform(Number).nullable(),
     total_neto_pagar: z.string().transform(Number),
+    total_modificado_manualmente: z.boolean(),                  
     utilidad_viaje: z.string().transform(Number),
     comision_porcentaje: z.string().transform(Number),
     comision_estimada: z.string().transform(Number),
@@ -280,6 +284,10 @@ export type LiquidacionFormData = {
     kilometros_recorridos: number;
     cliente: string;
     folio_liquidacion: string;
+};
+
+export type ModificarTotalFormData = {
+    total_neto_pagar: number;
 };
 
 export type TableItem = GastoCombustible | GastoCaseta | GastoVario | CostoFlete | Deduccion | Anticipo;

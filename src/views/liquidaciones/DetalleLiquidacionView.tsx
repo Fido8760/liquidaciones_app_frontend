@@ -15,19 +15,16 @@ import DetalleDeducciones from "../../components/liquidaciones/liquidacion-detal
 import ModalGastosCostos from "../../components/liquidaciones/liquidacion-detalle/shared/ModalGastosCostos";
 import ModalEditarGastosCostos from "../../components/liquidaciones/liquidacion-detalle/shared/ModalEditarGastosCostos";
 import NotasPanel from "../../components/notas/NotasPanel";
-import { useAuth } from "../../hooks/useAuth";
-import { EstadoLiquidacion } from "../../types";
 import ModalAjustarLiquidacion from "../../components/liquidaciones/liquidacion-detalle/resumen/ModalAjustarLiquidacion";
 
 export default function DetalleLiquidacionView() {
     const [activeTab, setActiveTab] = useState('resumen')
     const [showUpdateToast, setShowUpdateToast] = useState(false);
-    const [showFloatingButton, setShowFloatingButton] = useState(false);
     const [showAjustarModal, setShowAjustarModal] = useState(false);
     const prevDataRef = useRef<any>(null);
     const params = useParams();
     const liquidacionId = +params.liquidacionId!;
-    const { data: user } = useAuth();
+
 
     const { data: liquidacion, isLoading, isError} = useQuery({
         queryKey: ['liquidacion', liquidacionId],
@@ -53,15 +50,6 @@ export default function DetalleLiquidacionView() {
         }
         prevDataRef.current = liquidacion;
     }, [liquidacion]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setShowFloatingButton(window.scrollY > 200);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     if (isLoading) {
         return (
@@ -135,9 +123,7 @@ export default function DetalleLiquidacionView() {
         );
     }
 
-     const isDirector = user?.rol === 'DIRECTOR' || user?.rol === 'ADMIN';
-    const isSistemas = user?.rol === 'SISTEMAS';
-    const puedeAjustar = liquidacion && (isDirector || isSistemas) && liquidacion.estado === EstadoLiquidacion.APROBADA;
+
 
     if( liquidacion ) return (
         <>
@@ -219,19 +205,6 @@ export default function DetalleLiquidacionView() {
                     </div>
                 </div>
             </div>
-
-            {puedeAjustar && showFloatingButton && (
-                <button
-                    onClick={() => setShowAjustarModal(true)}
-                    className=" fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-purple-600 hover:border-purple-700 text-white font-bold px-5 p-4 rounded-full shadow-2xl hover:shadow-indigo-800/50 transform hover:scale-110 transition-all duration-300 animate-fade-in group"
-                    title="Ajustar comisión y rendimiento"
-                >
-                    <svg className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>
-                    <span className="hidden sm:inline">Ajustar Comisión</span>
-                </button>
-            )}
 
             {/* Modales Globales */}
             <ModalGastosCostos />

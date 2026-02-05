@@ -1,9 +1,10 @@
 import { ChartBarIcon } from "@heroicons/react/20/solid"
-import type { Liquidacion } from "../../../../types"
+import { type Liquidacion } from "../../../../types"
 import ComisionOperador from "./ComisionOperador"
 import UtilidadViaje from "./UtilidadViaje"
 import { formatCurrency } from "../../../../utils/formatCurrency"
 import FinancialRow from "../FinancialRow"
+
 
 type DesgloceFinancieroProps = {
     liquidacion: Liquidacion

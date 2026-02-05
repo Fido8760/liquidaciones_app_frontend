@@ -191,8 +191,8 @@ export default function DetalleHeader({ liquidacion }: DetalleHeaderProps) {
                                                 border border-purple-200 dark:border-purple-800
                                                 transition-colors"
                                     >
-                                        <span className="hidden sm:inline">Ajustar Comisión</span>
-                                        <span className="sm:hidden">Ajustar</span>
+                                        <span className="hidden sm:inline">Rendimiento Tabulado</span>
+                                        <span className="sm:hidden">Rendimiento</span>
                                     </button>
                                 )}
 

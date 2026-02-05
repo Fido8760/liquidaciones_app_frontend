@@ -57,7 +57,7 @@ export default function DetalleFletes({ liquidacion }: DetalleFletesProps) {
                 ) : (
                     <div className=" p-8 text-center bg-gray-50 dark:bg-gray-800/50 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700">
                         <MapPinIcon className=" w-12 h-12 mx-auto text-gray-400 mb-3" />
-                        <p className=" text-gray-500 dark:text-gray-400">No hay feltes registrados</p>
+                        <p className=" text-gray-500 dark:text-gray-400">No hay fletes registrados</p>
                     </div>
                 )}
             </div>
