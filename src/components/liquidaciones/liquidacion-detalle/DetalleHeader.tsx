@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { updateStatus } from "../../../api/LiquidacionAPI";
+import { updateStatus } from "../../../api/liquidaciones/LiquidacionAPI";
 import { useAuth } from "../../../hooks/useAuth";
 import { EstadoLiquidacion, type Liquidacion } from "../../../types";
 import { useNavigate } from "react-router-dom";
@@ -136,10 +136,6 @@ export default function DetalleHeader({ liquidacion }: DetalleHeaderProps) {
                                     {FORMATO_ESTADOS[liquidacion.estado] ?? liquidacion.estado}
                                 </span>
                             </div>
-
-                            <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 font-medium">
-                                {liquidacion.cliente}
-                            </p>
 
                             {liquidacion.estado === EstadoLiquidacion.PAGADA && liquidacion.fecha_pago && (
                                 <p className="text-xs text-emerald-600 mt-1 font-semibold">

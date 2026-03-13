@@ -2,7 +2,7 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import type { Liquidacion } from "../../../../types"
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCombustible } from "../../../../api/CombustibleAPI";
+import { deleteCombustible } from "../../../../api/combustible/CombustibleAPI";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { formatCurrency } from "../../../../utils/formatCurrency";

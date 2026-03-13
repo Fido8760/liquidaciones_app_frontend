@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import LiquidacionForm from "../../components/liquidaciones/LiquidacionForm";
 import type { LiquidacionFormData } from "../../types";
-import { createLiquidacion, getOperadores, getUnidades } from "../../api/LiquidacionAPI";
+import { createLiquidacion, getOperadores, getUnidades } from "../../api/liquidaciones/LiquidacionAPI";
 
 export default function CrearLiquidacionView() {
     const navigate = useNavigate()
@@ -15,7 +15,6 @@ export default function CrearLiquidacionView() {
         fecha_llegada: "",
         fecha_inicio: "",
         kilometros_recorridos: 0,
-        cliente: "",
         unidadId: 0,
         operadorId: 0,
         folio_liquidacion: "",

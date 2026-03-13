@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
-import { getAnticipoById, updateAnticipo } from "../../../../api/AnticipoAPI";
+import { getAnticipoById, updateAnticipo } from "../../../../api/anticipos/AnticipoAPI";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { AnticipoFormData } from "../../../../types";

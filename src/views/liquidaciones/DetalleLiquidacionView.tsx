@@ -2,16 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { getLiquidacionById } from "../../api/LiquidacionAPI";
+import { getLiquidacionById } from "../../api/liquidaciones/LiquidacionAPI";
 import DetalleHeader from "../../components/liquidaciones/liquidacion-detalle/DetalleHeader";
 import DetalleTabs from "../../components/liquidaciones/liquidacion-detalle/DetalleTabs";
 import ResumenTab from "../../components/liquidaciones/liquidacion-detalle/ResumenTab";
 import DetalleGastoCombustible from "../../components/liquidaciones/liquidacion-detalle/gastoCombustible/DetalleGastoCombustible";
-import DetalleGastoCaseta from "../../components/liquidaciones/liquidacion-detalle/gastoCasetas/DetalleGastoCaseta";
-import DetalleGastoViaje from "../../components/liquidaciones/liquidacion-detalle/gastoViaje/DetalleGastoViaje";
-import DetalleFlete from "../../components/liquidaciones/liquidacion-detalle/costoFlete/DetalleFlete";
+import DetalleFlete from "../../components/liquidaciones/liquidacion-detalle/flete/DetalleFlete";
 import DetalleAnticipo from "../../components/liquidaciones/liquidacion-detalle/anticipo/DetalleAnticipo";
-import DetalleDeducciones from "../../components/liquidaciones/liquidacion-detalle/deducciones/DetalleDeducciones";
 import ModalGastosCostos from "../../components/liquidaciones/liquidacion-detalle/shared/ModalGastosCostos";
 import ModalEditarGastosCostos from "../../components/liquidaciones/liquidacion-detalle/shared/ModalEditarGastosCostos";
 import NotasPanel from "../../components/notas/NotasPanel";
@@ -189,10 +186,7 @@ export default function DetalleLiquidacionView() {
                             <div className="min-h-[400px]">
                                 {activeTab === 'resumen' && <ResumenTab liquidacion={liquidacion} /> }
                                 {activeTab === 'gastos_combustible' && <DetalleGastoCombustible liquidacion={liquidacion} /> }
-                                {activeTab === 'gastos_casetas' && <DetalleGastoCaseta liquidacion={liquidacion} /> }
-                                {activeTab === 'gastos_varios' && <DetalleGastoViaje liquidacion={liquidacion} /> }
                                 {activeTab === 'ingresos' && <DetalleFlete liquidacion={liquidacion} /> }
-                                {activeTab === 'deducciones' && <DetalleDeducciones liquidacion={liquidacion} /> }
                                 {activeTab === 'anticipos' && <DetalleAnticipo liquidacion={liquidacion} /> }
                             </div>
                         </div>

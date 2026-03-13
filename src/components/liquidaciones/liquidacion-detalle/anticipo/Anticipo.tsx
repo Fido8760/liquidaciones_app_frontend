@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import AnticipoForm from "./AnticipoForm";
 import type { AnticipoFormData } from "../../../../types";
-import { createAnticipo } from "../../../../api/AnticipoAPI";
+import { createAnticipo } from "../../../../api/anticipos/AnticipoAPI";
 import { toast } from "react-toastify";
 
 type AnticipoProps = {

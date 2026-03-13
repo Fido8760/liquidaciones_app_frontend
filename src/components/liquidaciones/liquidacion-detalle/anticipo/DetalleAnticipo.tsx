@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { Liquidacion } from "../../../../types";
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteAnticipo } from "../../../../api/AnticipoAPI";
+import { deleteAnticipo } from "../../../../api/anticipos/AnticipoAPI";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2"
 import { formatCurrency } from "../../../../utils/formatCurrency";

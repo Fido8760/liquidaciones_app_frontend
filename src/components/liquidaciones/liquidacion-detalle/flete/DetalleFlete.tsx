@@ -3,7 +3,7 @@ import type { Liquidacion } from "../../../../types";
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import Swal from "sweetalert2"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteFlete } from "../../../../api/FleteAPI";
+import { deleteFlete } from "../../../../api/fletes/FleteAPI";
 import { toast } from "react-toastify";
 import { formatCurrency } from "../../../../utils/formatCurrency";
 import { useLiquidacionPermissions } from "../../../../hooks/useLiquidacionPermissions";
@@ -46,7 +46,7 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
     })
   }
 
-  if ( liquidacion.costos_fletes ) return (
+  if ( liquidacion.fletes ) return (
     <div className="p-4">
       <nav className=" my-5 flex gap-3 justify-between items-center">
         <p className="text-sm font-semibold mb-4 dark:text-white">
@@ -61,8 +61,8 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
         )}
       </nav>
       <ul className="space-y-2">
-        {liquidacion.costos_fletes.length > 0 ? (
-          liquidacion.costos_fletes.map((costo) => (
+        {liquidacion.fletes.length > 0 ? (
+          liquidacion.fletes.map((costo) => (
             <li
               key={costo.id}
               className="flex flex-col sm:flex-row justify-between items-center gap-4 border rounded-xl p-4 shadow-sm dark:border-gray-400"
@@ -73,6 +73,12 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
                     Monto:
                   </span>{" "}
                   {formatCurrency(costo.monto)}
+                </p>
+                <p className="dark:text-white">
+                  <span className="font-medium dark:text-gray-300">
+                    Descripción:
+                  </span>{" "}
+                  {costo.cliente}
                 </p>
                 <p className="dark:text-white">
                   <span className="font-medium dark:text-gray-300">
@@ -115,7 +121,7 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
           ))
         ) : (
           <p className="text-sm text-gray-500 dark:text-gray-300">
-            No hay gastos de casetas registrados
+            No hay fletes registrados
           </p>
         )}
       </ul>

@@ -3,7 +3,7 @@ import LiquidacionForm from "../../components/liquidaciones/LiquidacionForm";
 import { useForm } from "react-hook-form";
 import type { LiquidacionFormData } from "../../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLiquidacionById, getOperadores, getUnidades, updateLiquidacion } from "../../api/LiquidacionAPI";
+import { getLiquidacionById, getOperadores, getUnidades, updateLiquidacion } from "../../api/liquidaciones/LiquidacionAPI";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -38,7 +38,6 @@ export default function EditarLiquidacionView() {
                 fecha_inicio: liquidacion.fecha_inicio,
                 kilometros_recorridos: liquidacion.kilometros_recorridos,
                 folio_liquidacion: liquidacion.folio_liquidacion,
-                cliente: liquidacion.cliente,
                 unidadId: liquidacion.unidad.id,
                 operadorId: liquidacion.operador.id
             })

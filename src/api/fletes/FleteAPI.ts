@@ -1,13 +1,12 @@
-import { isAxiosError } from "axios"
-import api from "../lib/axios"
-import { deduccionSchema, type DeduccionFormData } from "../types"
+import { isAxiosError } from "axios";
+import api from "../../lib/axios";
+import { fleteSchema, type Flete, type FleteForm } from "../../types";
 
-export async function createDeduccion(formData: DeduccionFormData) {
+export async function createCostoflete(formData: FleteForm) {
     try {
-        const url = `/deduccion-flete`
-        const { data } = await api.post<DeduccionFormData>(url, formData)
-        return data
-        
+        const url = `/fletes`;
+        const { data } = await api.post<Flete>(url, formData);
+        return data;
     } catch (error) {
 
         if (isAxiosError(error) && error.response) {
@@ -20,14 +19,15 @@ export async function createDeduccion(formData: DeduccionFormData) {
     }
 }
 
-export const getDeduccionById = async (deduccionId : number ) => {
-    const url = `/deduccion-flete/${deduccionId}`
+export async function getCostoFleteById(costoId: number) {
+    const url = `/fletes/${costoId}`
     try {
         const { data } = await api(url)
-        const response =  deduccionSchema.safeParse(data)
-        if (response.success) {
+        const response = fleteSchema.safeParse(data)
+        if( response.success ) {
             return response.data
         }
+        
     } catch (error) {
 
         if (isAxiosError(error) && error.response) {
@@ -40,17 +40,18 @@ export const getDeduccionById = async (deduccionId : number ) => {
     }
 }
 
-type UpdateDeducionParams = {
+type UpdateFleteParams = {
     liquidacionId: number;
-    deduccionId: number;
-    formData: DeduccionFormData;
+    costoId: number;
+    formData: FleteForm;
 }
 
-export async function updateDeducion({formData, deduccionId} : UpdateDeducionParams) {
+export async function updateFlete({ formData, costoId }: UpdateFleteParams) {
     try {
-        const url = `/deduccion-flete/${deduccionId}`
+        const url = `/fletes/${costoId}`
         const { data } = await api.put(url, formData)
-        return data        
+        return data
+        
     } catch (error) {
 
         if (isAxiosError(error) && error.response) {
@@ -63,11 +64,11 @@ export async function updateDeducion({formData, deduccionId} : UpdateDeducionPar
     }
 }
 
-export async function deleteDeduccion(deduccionId: number) {
-    const url = `/deduccion-flete/${deduccionId}`
+export async function deleteFlete(fleteId: number) {
+    const url = `/fletes/${fleteId}`
     try {
-        const { data } = await api.delete<string>(url)
-        return data
+        const { data } = await api.delete<{message:string}>(url)
+        return data.message
     } catch (error) {
 
         if (isAxiosError(error) && error.response) {

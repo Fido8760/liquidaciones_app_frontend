@@ -1,11 +1,11 @@
 import { isAxiosError } from "axios";
-import api from "../lib/axios";
-import { costoFleteSchema, type CostoFleteFormData } from "../types";
+import api from "../../lib/axios";
+import { gastoCombustibleSchema, type GastoCombustible, } from "../../types";
 
-export async function createCostoflete(formData: CostoFleteFormData) {
+export async function createGastoCombustible(formData: FormData): Promise<GastoCombustible> {
     try {
-        const url = `/costo-fletes`;
-        const { data } = await api.post<CostoFleteFormData>(url, formData);
+        const url = `/gasto-combustible`;
+        const { data } = await api.post<GastoCombustible>(url, formData);
         return data;
     } catch (error) {
 
@@ -19,11 +19,12 @@ export async function createCostoflete(formData: CostoFleteFormData) {
     }
 }
 
-export async function getCostoFleteById(costoId: number) {
-    const url = `/costo-fletes/${costoId}`
+export async function getCombustiblebyId(combustibleId: number) {
+    const url = `/gasto-combustible/${combustibleId}`
+    
     try {
         const { data } = await api(url)
-        const response = costoFleteSchema.safeParse(data)
+        const response = gastoCombustibleSchema.safeParse(data)
         if( response.success ) {
             return response.data
         }
@@ -40,35 +41,30 @@ export async function getCostoFleteById(costoId: number) {
     }
 }
 
-type UpdateFleteParams = {
-    liquidacionId: number;
-    costoId: number;
-    formData: CostoFleteFormData;
-}
+type UpdateCombustibleParams = {
+    combustibleId: number;
+    formData: FormData;
+}; 
 
-export async function updateFlete({ formData, costoId }: UpdateFleteParams) {
+export async function updateCombustible({formData, combustibleId}: UpdateCombustibleParams) {
     try {
-        const url = `/costo-fletes/${costoId}`
-        const { data } = await api.put(url, formData)
-        return data
-        
+        const { data } = await api.put(`/gasto-combustible/${combustibleId}`, formData);
+        return data;
     } catch (error) {
-
         if (isAxiosError(error) && error.response) {
-            const errorData = error.response.data as { message: string };
-            const errorMessage = errorData.message
-            throw new Error(errorMessage)
+            throw new Error(error.response.data.message);
         }
-        throw new Error("Error desconocido")
-        
+        throw new Error("Error desconocido");
     }
 }
 
-export async function deleteFlete(costoId: number) {
-    const url = `/costo-fletes/${costoId}`
+export async function deleteCombustible(combustibleId: number) {
+    const url = `/gasto-combustible/${combustibleId}`
+    
     try {
-        const { data } = await api.delete<string>(url)
+        const { data } = await api.delete<{message: string}>(url)
         return data
+        
     } catch (error) {
 
         if (isAxiosError(error) && error.response) {

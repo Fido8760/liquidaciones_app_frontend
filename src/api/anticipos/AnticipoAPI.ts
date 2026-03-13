@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
-import api from "../lib/axios"
-import { anticipoSchema, type AnticipoFormData } from "../types"
+import api from "../../lib/axios"
+import { anticipoSchema, type AnticipoFormData } from "../../types"
 
 export async function createAnticipo(formData: AnticipoFormData) {
     try {

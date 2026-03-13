@@ -6,22 +6,15 @@ import DetalleFletes from "./resumen/DetalleFletes";
 import DesgloceFinanciero from "./resumen/DesgloceFinanciero";
 import EstadoPago from "./resumen/EstadoPago";
 import { useMemo, useState } from "react";
-import type { Deduccion, Liquidacion } from "../../../types";
+
 import ModalAjustarLiquidacion from "./resumen/ModalAjustarLiquidacion";
+import type { Liquidacion } from "../../../types";
 
 const getTotalAnticipos = (liquidacion: Liquidacion): number => {
     return (liquidacion.anticipos ?? []).reduce((sum, item) => sum + item.monto, 0);
 };
 
-const getDeduccionesAgrupadas = (liquidacion: Liquidacion): Record<Deduccion['tipo'], number> => {
-    return (liquidacion.deducciones ?? []).reduce((acc, deduccion) => {
-        if (!acc[deduccion.tipo]) {
-            acc[deduccion.tipo] = 0;
-        }
-        acc[deduccion.tipo] += deduccion.monto;
-        return acc;
-    }, {} as Record<Deduccion['tipo'], number>);
-};
+
 
 type ResumenTabProps = {
     liquidacion: Liquidacion;
@@ -31,7 +24,6 @@ export default function ResumenTab({ liquidacion }: ResumenTabProps) {
     const { data: user } = useAuth();
     const [isModalAjustarOpen, setIsModalAjustarOpen] = useState(false);
     const totalAnticipos = useMemo(() => getTotalAnticipos(liquidacion), [liquidacion]);
-    const deduccionesAgrupadas = useMemo(() => getDeduccionesAgrupadas(liquidacion), [liquidacion]);
     const { tieneAhorroDiesel, tieneExcesoDiesel, tieneAjusteRendimiento, tieneAjusteManual, tieneComisionAjustada, comisionFinal } = useRendimientoInfo(liquidacion);
     const canViewFinancials = ['DIRECTOR', 'ADMIN', 'SISTEMAS'].includes(user?.rol || '');
 
@@ -40,7 +32,6 @@ export default function ResumenTab({ liquidacion }: ResumenTabProps) {
             <ResumenMovimientos 
                 liquidacion={liquidacion}
                 totalAnticipos={totalAnticipos}
-                deduccionesAgrupadas={deduccionesAgrupadas}
             />
 
             <InformacionViaje 

@@ -19,16 +19,7 @@ type ComisionOperadorProps = {
     tieneAjusteManual: boolean;
 };
 
-export default function ComisionOperador({ 
-    liquidacion, 
-    totalAnticipos, 
-    comisionFinal, 
-    tieneComisionAjustada, 
-    tieneAjusteRendimiento, 
-    tieneAhorroDiesel, 
-    tieneExcesoDiesel, 
-    tieneAjusteManual 
-}: ComisionOperadorProps) {
+export default function ComisionOperador({ liquidacion, totalAnticipos, comisionFinal, tieneComisionAjustada, tieneAjusteRendimiento, tieneAhorroDiesel, tieneExcesoDiesel, tieneAjusteManual }: ComisionOperadorProps) {
     const { data: user } = useAuth();
     const [isModalModificarOpen, setIsModalModificarOpen] = useState(false);
     const [isModalAjustarOpen, setIsModalAjustarOpen] = useState(false);
@@ -36,6 +27,14 @@ export default function ComisionOperador({
     const isDirector = user?.rol === 'DIRECTOR' || user?.rol === 'ADMIN' || user?.rol === 'SISTEMAS';
     const puedeAjustar = isDirector && liquidacion.estado === EstadoLiquidacion.APROBADA;
     const tieneRendimientoTabulado = liquidacion.rendimiento_tabulado > 0;
+    
+    // El total que el sistema sugiere = total_bruto - anticipos
+    // Cuando se modifica, se guarda en total_neto_sugerido
+    const totalSugeridoPorSistema = liquidacion.total_bruto - totalAnticipos
+    const diferencia = liquidacion.total_neto_pagar - totalSugeridoPorSistema;
+    const porcentajeDiferencia = totalSugeridoPorSistema > 0 
+        ? ((diferencia / totalSugeridoPorSistema) * 100).toFixed(1) 
+        : '0';
     
     return (
         <div className="mb-4 p-5 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
@@ -137,17 +136,19 @@ export default function ComisionOperador({
 
                     {tieneComisionAjustada && (
                         <div className="my-2 pl-4 border-l-4 border-yellow-400 dark:border-yellow-600">
-                            <FinancialRow 
-                                label="Comisión Ajustada Manualmente" 
-                                amount={liquidacion.comision_pagada!} 
+                            <FinancialRow
+                                label={`Comisión ajustada (${liquidacion.comision_porcentaje}%)`}
+                                amount={Number(liquidacion.comision_estimada)}
                                 isBold
                                 className="text-yellow-700 dark:text-yellow-400"
                             />
                             <p className="text-xs text-yellow-600 dark:text-yellow-500 mt-1">
-                                El director modificó la comisión estimada
+                                El director modificó el porcentaje de comisión
                             </p>
                         </div>
                     )}
+
+
 
                     <div className="border-t border-purple-200 dark:border-purple-700 pt-2 mt-2 mb-3">
                         <FinancialRow 
@@ -267,27 +268,29 @@ export default function ComisionOperador({
                             </div>
 
                             {/* Info adicional si fue modificado */}
-                            {liquidacion.total_modificado_manualmente && liquidacion.total_neto_sugerido !== null && (
+                            {liquidacion.total_modificado_manualmente && (
                                 <div className="mt-3 pt-3 border-t border-purple-300 dark:border-purple-700">
                                     <div className="flex items-center justify-between text-xs">
                                         <span className="text-gray-600 dark:text-gray-400">
                                             Sistema sugería:
                                         </span>
                                         <span className="font-semibold text-gray-700 dark:text-gray-300">
-                                            {formatCurrency(liquidacion.total_neto_sugerido)}
+                                            {formatCurrency(totalSugeridoPorSistema)}
                                         </span>
                                     </div>
                                     <div className={`flex items-center justify-between text-xs mt-1 ${
-                                        liquidacion.total_neto_pagar > liquidacion.total_neto_sugerido
+                                        diferencia > 0
                                             ? 'text-green-600 dark:text-green-400'
-                                            : 'text-orange-600 dark:text-orange-400'
+                                            : diferencia < 0
+                                            ? 'text-orange-600 dark:text-orange-400'
+                                            : 'text-gray-600 dark:text-gray-400'
                                     }`}>
                                         <span>Diferencia:</span>
                                         <span className="font-bold">
-                                            {liquidacion.total_neto_pagar > liquidacion.total_neto_sugerido ? '+' : ''}
-                                            {formatCurrency(liquidacion.total_neto_pagar - liquidacion.total_neto_sugerido)}
+                                            {diferencia > 0 ? '+' : ''}
+                                            {formatCurrency(diferencia)}
                                             {' '}
-                                            ({((liquidacion.total_neto_pagar - liquidacion.total_neto_sugerido) / liquidacion.total_neto_sugerido * 100).toFixed(1)}%)
+                                            ({diferencia > 0 ? '+' : ''}{porcentajeDiferencia}%)
                                         </span>
                                     </div>
 

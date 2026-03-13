@@ -2,10 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import GastoCombustible from '../gastoCombustible/GastoCombustible';
-import GastoCasetas from '../gastoCasetas/GastoCasetas';
-import GastoVarios from '../gastoViaje/GastoVarios';
-import CostoFlete from '../costoFlete/CostoFlete';
-import Deduccion from '../deducciones/Deduccion';
+import CostoFlete from '../flete/Flete';
 import Anticipo from '../anticipo/Anticipo';
 
 
@@ -28,18 +25,10 @@ export default function ModalGastosCostos( ) {
         switch(modalGasto) {
             case 'combustible':
                 return <GastoCombustible onSuccess={cerrarModal} liquidacionId={liquidacionId} />
-
-            case 'caseta':
-                return <GastoCasetas onSuccess={cerrarModal} liquidacionId={liquidacionId} />
-
-            case 'varios':
-                return <GastoVarios onSuccess={cerrarModal} liquidacionId={liquidacionId} />
             
             case 'flete':
                 return <CostoFlete onSuccess={cerrarModal} liquidacionId={liquidacionId} />
             
-            case 'deduccion':
-                return <Deduccion onSuccess={cerrarModal} liquidacionId={liquidacionId} />
             
             case 'anticipo':
                 return <Anticipo onSuccess={cerrarModal} liquidacionId={liquidacionId} />

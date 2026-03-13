@@ -1,4 +1,4 @@
-import {  z } from 'zod';
+import {  number, z } from 'zod';
 
 /** Auth Users */
 
@@ -122,69 +122,54 @@ export const gastoCombustibleSchema = z.object({
 });
 
 export type GastoCombustible = z.infer<typeof gastoCombustibleSchema>;
-export type GastoCombustibleForm = Pick<GastoCombustible, 'litros' | 'metodo_pago' | 'precio_litro' | 'monto'>;
+export type GastoCombustibleForm = Pick<GastoCombustible, 'metodo_pago' | 'precio_litro' | 'monto'>;
 export type GastoCombustibleFormData = GastoCombustibleForm & {
     evidencia?: FileList;
     liquidacionId: number;
 };
 
-export const gastoCasetaSchema = z.object({
+export const tipoGastoSchema = z.object({
     id: z.number(),
-    monto: z.string().transform(Number),
-    metodo_pago_caseta: z.enum(["EFECTIVO", "IAVE/TAG"]),
-    evidencia: z.string().nullable(),
-    deletedAt: z.string().nullable().optional(),
+    nombre: z.string(),
+    activo: z.boolean()
 });
+export type TipoGasto = z.infer<typeof tipoGastoSchema>;
 
-export type GastoCaseta = z.infer<typeof gastoCasetaSchema>;
-export type GastoCasetaForm = Pick<GastoCaseta, 'monto' | 'metodo_pago_caseta'>;
-export type GastoCasetaFormData = GastoCasetaForm & {
+export const gastoSchema = z.object({
+    id: z.number(),
+    tipo_gasto: tipoGastoSchema,
+    monto: z.string().transform(number),
+    descripcion: z.string(). nullable(),
+    afecta_operador: z.boolean(),
+    evidencia: z.string().nullable(),
+    createdAt: z.string(),
+    deletedAt: z.string().nullable().optional()
+})
+export type Gasto = z.infer<typeof gastoSchema>;
+export type GastoFormData = {
+    tipoGastoId: number;
+    monto: number,
+    descripcion?: string,
+    afecta_operador?: boolean;
     evidencia?: FileList;
     liquidacionId: number;
-};
+}
 
-export const gastoVarioSchema = z.object({
+export const fleteSchema = z.object({
     id: z.number(),
-    concepto: z.string(),
-    monto: z.string().transform(Number),
-    observaciones: z.string().nullable(),
-    evidencia: z.string().nullable(),
-    deletedAt: z.string().nullable().optional(),
-});
-
-export type GastoVario = z.infer<typeof gastoVarioSchema>;
-export type GastoVarioForm = Pick<GastoVario, 'concepto' | 'monto' | 'observaciones'>;
-export type GastoVarioFormData = GastoVarioForm & {
-    evidencia?: FileList;
-    liquidacionId: number;
-};
-
-export const costoFleteSchema = z.object({
-    id: z.number(),
+    cliente: z.string(),
     monto: z.string().transform(Number),
     origen: z.string().nullable(),
     destino: z.string().nullable(),
     descripcion: z.string()
 });
 
-export type CostoFlete = z.infer<typeof costoFleteSchema>;
-export type CostoFleteForm = Pick<CostoFlete, 'monto' | 'descripcion' | 'origen' | 'destino'>;
-export type CostoFleteFormData = CostoFleteForm & {
+export type Flete = z.infer<typeof fleteSchema>;
+export type FleteForm = Pick<Flete, 'monto' | 'descripcion' | 'origen' | 'destino' | 'cliente'>;
+export type FleteFormData = FleteForm & {
     liquidacionId: number;
 };
 
-export const deduccionSchema = z.object({
-    id: z.number(),
-    tipo: z.enum(['SEGURO', 'MANIOBRA', 'REPARTO', 'OTROS', 'ESTADIAS']),
-    monto: z.string().transform(Number),
-    deletedAt: z.string().nullable().optional(),
-});
-
-export type Deduccion = z.infer<typeof deduccionSchema>;
-export type DeduccionForm = Pick<Deduccion, 'tipo' | 'monto'>;
-export type DeduccionFormData = DeduccionForm & {
-    liquidacionId: number;
-};
 
 export const anticipoSchema = z.object({
     id: z.number(),
@@ -213,7 +198,6 @@ export const liquidacionSchema = z.object({
     usuario_pagador: userSchema.nullable().optional(),
     usuario_modificador_total: userSchema.nullable().optional(),
     folio_liquidacion: z.string(),
-    cliente: z.string(),
     fecha_inicio: z.string(),
     fecha_fin: z.string(),
     fecha_llegada: z.string(),
@@ -225,17 +209,16 @@ export const liquidacionSchema = z.object({
     diesel_a_favor_sin_iva: z.string().transform(Number),
     diesel_en_contra_sin_iva: z.string().transform(Number),
     resultado_rendimiento: z.enum(["FAVOR", "CONTRA", "NEUTRO"]),
-    total_costo_fletes: z.string().transform(Number),
+    total_fletes: z.string().transform(Number),
     total_combustible: z.string().transform(Number),
-    total_casetas: z.string().transform(Number),
-    total_gastos_varios: z.string().transform(Number),
-    total_deducciones_comerciales: z.string().transform(Number),
+    total_gastos: z.string().transform(Number),
     total_bruto: z.string().transform(Number),
     total_neto_sugerido: z.string().transform(Number).nullable(),
     total_neto_pagar: z.string().transform(Number),
     total_modificado_manualmente: z.boolean(),                  
     utilidad_viaje: z.string().transform(Number),
     comision_porcentaje: z.string().transform(Number),
+    gasto_ferry: z.string().transform(Number),
     comision_estimada: z.string().transform(Number),
     comision_pagada: z.string().transform(Number).nullable(),
     ajuste_manual: z.string().transform(Number),
@@ -245,10 +228,8 @@ export const liquidacionSchema = z.object({
     updatedAt: z.string(),
     deletedAt: z.string().nullable().optional(),
     gastos_combustible: z.array(gastoCombustibleSchema).optional().default([]),
-    gastos_caseta: z.array(gastoCasetaSchema).optional().default([]),
-    gastos_varios: z.array(gastoVarioSchema).optional().default([]),
-    costos_fletes: z.array(costoFleteSchema).optional().default([]),
-    deducciones: z.array(deduccionSchema).optional().default([]),
+    gastos: z.array(gastoSchema).optional().default([]),
+    fletes: z.array(fleteSchema).optional().default([]),
     anticipos: z.array(anticipoSchema).optional().default([]),
     notas: z.array(notaSchema).optional().default([]),
 });
@@ -265,14 +246,7 @@ export type Liquidaciones = z.infer<typeof liquidacionesSchema>;
 // ═══════════════════════════════════════════════════
 // FORM TYPES (para React Hook Form)
 // ═══════════════════════════════════════════════════
-
-export type AjustarFormData = {
-    rendimiento_tabulado: number;
-    comision_porcentaje: number;
-    comision_pagada?: number | null;
-    ajuste_manual: number;
-    motivo_ajuste?: string | null;
-};
+export type AjustarFormData = Pick<Liquidacion, 'rendimiento_tabulado' | 'comision_porcentaje' | 'ajuste_manual' | 'motivo_ajuste' | 'gasto_ferry'>
 
 export type LiquidacionFormData = {
     unidadId: number;
@@ -282,7 +256,6 @@ export type LiquidacionFormData = {
     fecha_fin: string;
     rendimiento_tabulado: number;
     kilometros_recorridos: number;
-    cliente: string;
     folio_liquidacion: string;
 };
 
@@ -290,4 +263,4 @@ export type ModificarTotalFormData = {
     total_neto_pagar: number;
 };
 
-export type TableItem = GastoCombustible | GastoCaseta | GastoVario | CostoFlete | Deduccion | Anticipo;
+export type TableItem = GastoCombustible | Gasto | Flete | Anticipo;

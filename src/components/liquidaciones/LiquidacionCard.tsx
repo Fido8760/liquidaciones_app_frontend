@@ -5,7 +5,7 @@ import { CalendarIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, TruckI
 import { EstadoLiquidacion, type Liquidacion } from "../../types";
 import { formatDate } from "../../utils/formatDate";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteLiquidacion, updateStatus } from "../../api/LiquidacionAPI";
+import { deleteLiquidacion, updateStatus } from "../../api/liquidaciones/LiquidacionAPI";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useLiquidacionPermissions } from "../../hooks/useLiquidacionPermissions";

@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
-import api from "../lib/axios";
-import { liquidacionesSchema, liquidacionSchema, operadoresSchema, unidadesSchema, type AjustarFormData, type Liquidacion, type LiquidacionFormData, type ModificarTotalFormData } from "../types";
+import api from "../../lib/axios";
+import { liquidacionesSchema, liquidacionSchema, operadoresSchema, unidadesSchema, type AjustarFormData, type Liquidacion, type LiquidacionFormData, type ModificarTotalFormData } from "../../types";
 
 
 export async function getUnidades() {
@@ -189,6 +189,7 @@ type AjusteLiquidacionParams = {
 }
 
 export async function ajusteLiquidacion({formData, liquidacionId}: AjusteLiquidacionParams ) {
+    console.log(formData)
     try {
         const url = `/liquidaciones/${liquidacionId}/ajustar`;
         const { data } = await api.patch<{message: string}>(url, formData);

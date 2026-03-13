@@ -6,7 +6,7 @@ import { Fragment } from "react/jsx-runtime";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { formatCurrency } from "../../../../utils/formatCurrency";
 import ErrorMessage from "../../../ErrorMessage";
-import { ajusteLiquidacion } from "../../../../api/LiquidacionAPI";
+import { ajusteLiquidacion } from "../../../../api/liquidaciones/LiquidacionAPI";
 import { toast } from "react-toastify";
 
 const inputStyles = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white";
@@ -25,6 +25,7 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
     comision_porcentaje: liquidacion.comision_porcentaje || 0,
     ajuste_manual: liquidacion.ajuste_manual || 0,
     motivo_ajuste: liquidacion.motivo_ajuste || "",
+    gasto_ferry: liquidacion.gasto_ferry || 0
   };
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<AjustarFormData>({ 
@@ -45,6 +46,7 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
 
   const watchComision = watch("comision_porcentaje");
   const watchAjuste = watch("ajuste_manual");
+  const watchFerry = watch("gasto_ferry");
   const requiereMotivo = watchAjuste !== 0;
 
   // ═══════════════════════════════════════════════════
@@ -52,7 +54,7 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
   // ═══════════════════════════════════════════════════
   
   // 1. Base para comisión
-  const baseComision = liquidacion.total_costo_fletes - liquidacion.total_combustible;
+  const baseComision = liquidacion.total_fletes - liquidacion.total_combustible - watchFerry;
   
   // 2. Comisión según el porcentaje ajustado
   const comisionCalculada = baseComision * (watchComision / 100);
@@ -213,6 +215,24 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
                             </strong>
                           </p>
                         </div>
+
+                        <div className=" md:col-span-2">
+                          <label htmlFor="gasto_ferry" className={labelStyles}>Gasto de Ferry ($)</label>
+                          <input 
+                            type="number"
+                            step="0.01"
+                            id="gasto_ferry"
+                            className={inputStyles}
+                            placeholder="0.00"
+                            {...register("gasto_ferry", {
+                              valueAsNumber: true,
+                              min: { value: 0, message: "No puede ser negativo"}
+                            })}
+                          />
+                          <p className=" text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <strong>Opcional:</strong> Si el viaje requirió ferry, ingresa el monto. Se descuenta antes de calcular la comisión.
+                          </p>
+                        </div>
                       </div>
                     </fieldset>
 
@@ -273,15 +293,30 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
                       
                       <div className="space-y-2 text-sm">
                         {/* Comisión */}
-                        <div className="flex justify-between">
-                          <span className="text-gray-700 dark:text-gray-300">
-                            Comisión ({watchComision}%)
-                          </span>
-                          <span className="font-semibold text-gray-900 dark:text-white">
-                            {formatCurrency(comisionCalculada)}
-                          </span>
+                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 space-y-1.5 mb-3">
+                          <div className=" flex justify-between text-xs">
+                            <span className="text-gray-60 dark:text-gray-400">Total Flete:</span>
+                            <span className="font-medium dark:text-white">{formatCurrency(liquidacion.total_fletes)}</span>
+                          </div>
+                          <div className=" flex justify-between text-xs">
+                            <span className=" text-gray-600 dark:text-gray-400">- Diesel:</span>
+                            <span className=" font-medium text-red-600 dark:text-red-400">-{formatCurrency(liquidacion.total_combustible)}</span>
+                          </div>
+                          {watchFerry > 0 && (
+                            <div className=" flex justify-between text-xs">
+                              <span className="text-gray-600 dark:text-gray-400">- Ferry:</span>
+                              <span className=" font-medium text-red-600 dark:text-red-400">-{formatCurrency(watchFerry)}</span>
+                            </div>
+                          )}
+                          <div className=" flex justify-between text-xs font-bold border-t border-blue-300 dark:border-blue-700 pt-1.5">
+                            <span className=" text-blue-700 dark:text-blue-400">= Base Comisión</span>
+                            <span className=" text-blue-700 dark:text-blue-400">{formatCurrency(baseComision)}</span>
+                          </div>
                         </div>
-
+                        <div className=" flex justify-between">
+                          <span className=" text-gray-700 dark:text-gray-300">Comisión ({watchComision}%)</span>
+                          <span className=" font-semibold text-gray-900 dark:text-white">{formatCurrency(comisionCalculada)}</span>
+                        </div>
                         {/* Bono diesel a favor */}
                         {bonoDiesel > 0 && (
                           <div className="flex justify-between">

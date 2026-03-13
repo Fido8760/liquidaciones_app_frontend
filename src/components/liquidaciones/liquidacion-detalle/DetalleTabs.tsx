@@ -1,13 +1,9 @@
-import { ClipboardDocumentListIcon, FireIcon, TicketIcon, BriefcaseIcon, TruckIcon, MinusCircleIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { ClipboardDocumentListIcon, FireIcon, TruckIcon, } from '@heroicons/react/24/outline';
 
 const TABS = [
     { id: 'resumen', label: 'Resumen General', icon: ClipboardDocumentListIcon },
     { id: 'gastos_combustible', label: 'Gastos de Combustible', icon: FireIcon },
-    { id: 'gastos_casetas', label: 'Gastos de Casetas', icon: TicketIcon },
-    { id: 'gastos_varios', label: 'Gastos de Viaje', icon: BriefcaseIcon },
     { id: 'ingresos', label: 'Fletes', icon: TruckIcon },
-    { id: 'deducciones', label: 'Deducciones', icon: MinusCircleIcon },
-    { id: 'anticipos', label: 'Anticipos', icon: CurrencyDollarIcon },
 ];
 
 type DetalleTabsProps = {

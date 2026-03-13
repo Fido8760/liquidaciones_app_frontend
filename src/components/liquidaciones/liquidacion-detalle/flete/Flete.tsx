@@ -1,19 +1,19 @@
 import { useForm } from "react-hook-form";
-import CostoFleteForm from "./CostoFleteForm";
+import CostoFleteForm from "./FleteForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CostoFleteFormData } from "../../../../types";
+import type { FleteFormData } from "../../../../types";
 import { toast } from "react-toastify";
-import { createCostoflete } from "../../../../api/FleteAPI";
+import { createCostoflete } from "../../../../api/fletes/FleteAPI";
 
-type CostoFleteProps = {
+type FleteProps = {
     onSuccess: () => void;
     liquidacionId: number;
 };
 
-export default function CostoFlete({ onSuccess, liquidacionId }: CostoFleteProps) {
+export default function Flete({ onSuccess, liquidacionId }: FleteProps) {
     const queryClient = useQueryClient()
     
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<CostoFleteFormData>({ defaultValues : {
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FleteFormData>({ defaultValues : {
         monto: 0,
         descripcion: '',
         liquidacionId
@@ -33,7 +33,7 @@ export default function CostoFlete({ onSuccess, liquidacionId }: CostoFleteProps
 
     })
 
-    const handleForm = (formData: CostoFleteFormData) => {
+    const handleForm = (formData: FleteFormData) => {
         mutate(formData);
     }
 
@@ -48,7 +48,7 @@ export default function CostoFlete({ onSuccess, liquidacionId }: CostoFleteProps
                 <CostoFleteForm register={register} errors={errors} />
                 <input
                     type="submit"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400"
+                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400 rounded-md"
                     value={isPending ? "Guardando..." : "Agregar"}
                     disabled={isPending}
                 />

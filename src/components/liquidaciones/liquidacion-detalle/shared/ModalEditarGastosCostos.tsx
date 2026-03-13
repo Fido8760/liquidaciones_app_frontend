@@ -2,10 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import EditarGastoCombustible from '../gastoCombustible/EditarGastoCombustible';
-import EditarGastoCaseta from '../gastoCasetas/EditarGastoCaseta';
-import EditarGastoVarios from '../gastoViaje/EditarGastoVarios';
-import EditarCostoFlete from '../costoFlete/EditarCostoFlete';
-import EditarDeduccion from '../deducciones/EditarDeduccion';
+import EditarCostoFlete from '../flete/EditarFlete';
 import EditarAnticipo from '../anticipo/EditarAnticipo';
 
 
@@ -29,17 +26,9 @@ export default function ModalEditarGastosCostos() {
             case 'combustible':
                 return <EditarGastoCombustible onSuccess={cerrarModal} liquidacionId={liquidacionId} />
             
-            case 'caseta':
-                return <EditarGastoCaseta onSuccess={cerrarModal} liquidacionId={liquidacionId} />
-            
-            case 'varios':
-                return <EditarGastoVarios onSuccess={cerrarModal} liquidacionId={liquidacionId} />
-            
             case 'flete':
                 return <EditarCostoFlete onSuccess={cerrarModal} liquidacionId={liquidacionId} />
             
-            case 'deduccion':
-                return <EditarDeduccion onSuccess={cerrarModal} liquidacionId={liquidacionId} />
             
             case 'anticipo':
                 return <EditarAnticipo onSuccess={cerrarModal} liquidacionId={liquidacionId} />

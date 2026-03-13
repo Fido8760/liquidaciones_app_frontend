@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getLiquidaciones } from "../api/LiquidacionAPI"
+import { getLiquidaciones } from "../api/liquidaciones/LiquidacionAPI";
 import LiquidacionesList from "../components/liquidaciones/LiquidacionesList"
 import { useEffect, useState, useRef } from "react"
 

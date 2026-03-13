@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import type { GastoCombustible, GastoCombustibleFormData } from "../../../../types"; 
 import GastoCombustibleForm from "./GastoCombustibleForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createGastoCombustible } from "../../../../api/CombustibleAPI";
+import { createGastoCombustible } from "../../../../api/combustible/CombustibleAPI";
 import { toast } from "react-toastify";
 import imageCompression from 'browser-image-compression';
 
@@ -13,13 +13,12 @@ type GastoCombustibleProps = {
 
 export default function GastoCombustible({ onSuccess, liquidacionId }: GastoCombustibleProps) {
     const initialValues: Partial<GastoCombustibleFormData> = {
-        litros: 0,
         precio_litro: 0,
         monto: 0,
         metodo_pago: 'TARJETA',
     };
     
-    const { register, handleSubmit, watch, formState: { errors }, reset, setValue } = useForm<GastoCombustibleFormData>({ defaultValues: initialValues });
+    const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<GastoCombustibleFormData>({ defaultValues: initialValues });
 
     const queryClient = useQueryClient();
 
@@ -39,24 +38,24 @@ export default function GastoCombustible({ onSuccess, liquidacionId }: GastoComb
     const handleForm = async (dataFromHook: GastoCombustibleFormData) => {
 
         const formPayload  = new FormData()
-
-        formPayload.append('litros', String(dataFromHook.litros));
         formPayload.append('precio_litro', String(dataFromHook.precio_litro));
         formPayload.append('monto', String(dataFromHook.monto));
         formPayload.append('metodo_pago', dataFromHook.metodo_pago);
         formPayload.append('liquidacionId', String(liquidacionId));
 
         if(dataFromHook.evidencia && dataFromHook.evidencia.length > 0) {
-            const imageFile = dataFromHook.evidencia[0]
-            const compressedFile = await imageCompression(imageFile, {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1280,
-                useWebWorker: true,
-                fileType: 'image/webp'
-            })
-
-            const webpFile = new File([compressedFile], 'evidencia.webp', { type: 'image/webp' })
-            formPayload.append('file', webpFile)
+            const file = dataFromHook.evidencia[0];
+            if(file.type.startsWith('image/')) {
+                const compressed = await imageCompression(file, {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1280,
+                    useWebWorker: true,
+                    fileType: 'image/webp'
+                });
+                formPayload.append('file', new File([compressed], 'evidencia.webp', { type: 'image/webp'}));
+            } else {
+                formPayload.append('file', file)
+            }
         }
 
         mutate(formPayload)
@@ -70,7 +69,7 @@ export default function GastoCombustible({ onSuccess, liquidacionId }: GastoComb
                 noValidate
                 onSubmit={handleSubmit(handleForm)}
             >   
-                <GastoCombustibleForm errors={errors} register={register} watch={watch} setValue={setValue}/>
+                <GastoCombustibleForm errors={errors} register={register} watch={watch}/>
 
                 <input
                     type="submit"

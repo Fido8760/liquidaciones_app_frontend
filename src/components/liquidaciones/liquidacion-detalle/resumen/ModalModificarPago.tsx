@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { formatCurrency } from "../../../../utils/formatCurrency";
 import type { Liquidacion } from "../../../../types";
-import { modificarTotalPago } from "../../../../api/LiquidacionAPI";
+import { modificarTotalPago } from "../../../../api/liquidaciones/LiquidacionAPI";
 import { toast } from "react-toastify";
 
 type ModalModificarPagoProps = {
@@ -52,9 +52,9 @@ export default function ModalModificarPago({ liquidacion, onClose }: ModalModifi
 
     // Calcular preview
     const totalNumerico = parseFloat(nuevoTotal) || 0;
-    const totalSugerido = liquidacion.total_modificado_manualmente 
-        ? liquidacion.total_neto_sugerido || liquidacion.total_neto_pagar 
-        : liquidacion.total_neto_pagar;
+    const totalAnticipos = liquidacion.anticipos?.reduce((sum, ant) => sum + ant.monto, 0) || 0;
+    
+    const totalSugerido = liquidacion.total_bruto - totalAnticipos;
     const totalActual = liquidacion.total_neto_pagar;
     
     const diferenciaVsSugerido = totalNumerico - totalSugerido;
@@ -139,13 +139,11 @@ export default function ModalModificarPago({ liquidacion, onClose }: ModalModifi
                                 </div>
                             </div>
                             
-                            {liquidacion.anticipos && liquidacion.anticipos.length > 0 && (
+                            {totalAnticipos > 0 && (
                                 <div className="flex justify-between text-purple-700 dark:text-purple-400">
                                     <span>- Anticipos:</span>
                                     <span className="font-medium">
-                                        {formatCurrency(
-                                            liquidacion.anticipos.reduce((sum, ant) => sum + ant.monto, 0)
-                                        )}
+                                        {formatCurrency(totalAnticipos)}
                                     </span>
                                 </div>
                             )}
