@@ -34,12 +34,15 @@ export default function InformacionViaje({ liquidacion, canViewFinancials }: Inf
                         value={`${liquidacion.operador.nombre} ${liquidacion.operador.apellido_p} ${liquidacion.operador.apellido_m}`}
                         icon={<UserIcon className="w-5 h-5 text-gray-500" />}
                     />
-                    <InfoItem 
-                        label="Cliente" 
-                        value={`${liquidacion.cliente}`} 
-                        icon={<BuildingOfficeIcon className="w-5 h-5 text-gray-500" />}
-                    />
-                    
+
+                    {liquidacion.fletes && liquidacion.fletes.length > 0 && (
+                        <InfoItem 
+                            label="Cliente(s)" 
+                            value={liquidacion.fletes.map(f => f.cliente).join(', ')}
+                            icon={<BuildingOfficeIcon className="w-5 h-5 text-gray-500" />}
+                        />
+                    )}
+
                     <InfoItem 
                         label="Fecha Inicio" 
                         value={formatDateTime(liquidacion.fecha_inicio)}

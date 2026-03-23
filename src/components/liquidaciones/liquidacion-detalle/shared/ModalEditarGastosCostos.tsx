@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import EditarGastoCombustible from '../gastoCombustible/EditarGastoCombustible';
 import EditarCostoFlete from '../flete/EditarFlete';
 import EditarAnticipo from '../anticipo/EditarAnticipo';
+import EditarGasto from '../gasto/EditarGasto';
 
 
 export default function ModalEditarGastosCostos() {
@@ -32,6 +33,9 @@ export default function ModalEditarGastosCostos() {
             
             case 'anticipo':
                 return <EditarAnticipo onSuccess={cerrarModal} liquidacionId={liquidacionId} />
+            
+            case 'gasto':
+                return <EditarGasto onSuccess={cerrarModal} liquidacionId={liquidacionId} />
                 
             
             default:
@@ -71,11 +75,10 @@ export default function ModalEditarGastosCostos() {
                                     <div className="flex justify-between items-center border-b pb-4">
                                         <Dialog.Title className="text-xl font-semibold text-gray-800 dark:text-gray-100">
                                             {modalGasto === 'combustible' && 'Edita el combustible'}
-                                            {modalGasto === 'caseta' && 'Edita los gasto en casetas'}
-                                            {modalGasto === 'varios' && 'Edita otros gastos de viaje'}
                                             {modalGasto === 'flete' && 'Edita el costo del flete'}
-                                            {modalGasto === 'deduccion' && 'Edita las deduciones del viaje'}
                                             {modalGasto === 'anticipo' && 'Edita los anticipos'}
+                                            {modalGasto === 'gasto' && 'Edita el gastos de viaje'}
+
                                         </Dialog.Title>
                                         <button
                                             onClick={cerrarModal}

@@ -13,6 +13,7 @@ import ModalGastosCostos from "../../components/liquidaciones/liquidacion-detall
 import ModalEditarGastosCostos from "../../components/liquidaciones/liquidacion-detalle/shared/ModalEditarGastosCostos";
 import NotasPanel from "../../components/notas/NotasPanel";
 import ModalAjustarLiquidacion from "../../components/liquidaciones/liquidacion-detalle/resumen/ModalAjustarLiquidacion";
+import DetalleGasto from "../../components/liquidaciones/liquidacion-detalle/gasto/DetalleGasto";
 
 export default function DetalleLiquidacionView() {
     const [activeTab, setActiveTab] = useState('resumen')
@@ -187,6 +188,7 @@ export default function DetalleLiquidacionView() {
                                 {activeTab === 'resumen' && <ResumenTab liquidacion={liquidacion} /> }
                                 {activeTab === 'gastos_combustible' && <DetalleGastoCombustible liquidacion={liquidacion} /> }
                                 {activeTab === 'ingresos' && <DetalleFlete liquidacion={liquidacion} /> }
+                                {activeTab === 'gastos' && <DetalleGasto liquidacion={liquidacion} /> }
                                 {activeTab === 'anticipos' && <DetalleAnticipo liquidacion={liquidacion} /> }
                             </div>
                         </div>

@@ -14,9 +14,11 @@ type DetalleGastoCombustibleProps = {
 }
 
 export default function DetalleGastoCombustible({ liquidacion }: DetalleGastoCombustibleProps) {
-    const navigate = useNavigate()
-    const location = useLocation()
-    const queryClient = useQueryClient()
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryClient = useQueryClient();
+
+    const esImagen = (url: string) => /\.(jpg|jpeg|png|webp)$/i.test(url);
 
     const { canEdit } = useLiquidacionPermissions(liquidacion)
 
@@ -29,7 +31,6 @@ export default function DetalleGastoCombustible({ liquidacion }: DetalleGastoCom
             toast.success(data.message)
             queryClient.invalidateQueries({ queryKey: ['liquidacion', liquidacion.id]})
         }
-
     })
 
     const handleDeleteClick = (gastoId: number) => {
@@ -71,21 +72,34 @@ export default function DetalleGastoCombustible({ liquidacion }: DetalleGastoCom
                             <p className="dark:text-white"><span className="font-medium dark:text-gray-300">Precio por litro:</span> {formatCurrency(gasto.precio_litro)}</p>
                             <p className="dark:text-white"><span className="font-medium dark:text-blue-200">Monto:</span> {formatCurrency(gasto.monto)}</p>
                             <p className="dark:text-white"><span className="font-medium dark:text-gray-200" >Método de pago:</span> {gasto.metodo_pago}</p>
-                            <p>
-                                <span className="font-medium dark:text-amber-50">Evidencia:</span>{" "}
-                                { gasto.evidencia !== 'default.pdf' ? (
-                                    <a
-                                        href={gasto.evidencia!}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-600 underline"
-                                    >
-                                    Ver archivo
-                                    </a>
+                            <div>
+                                <span className="font-medium dark:text-amber-300 text-sm">Evidencia: </span>
+                                {gasto.evidencia && gasto.evidencia !== 'default.pdf' ? (
+                                    esImagen(gasto.evidencia) ? (
+                                        <a href={gasto.evidencia} target="_blank" rel="noopener noreferrer">
+                                            <img
+                                                src={gasto.evidencia}
+                                                alt="Evidencia"
+                                                className="mt-1 h-20 w-20 object-cover rounded-lg border border-gray-200 dark:border-gray-600 hover:opacity-80 transition-opacity cursor-pointer"
+                                            />
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href={gasto.evidencia}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-1 flex items-center gap-2 text-red-500 hover:text-red-700 transition-colors"
+                                        >
+                                            <svg className="h-8 w-8 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+                                            </svg>
+                                            <span className="text-sm underline">Ver PDF</span>
+                                        </a>
+                                    )
                                 ) : (
-                                    <span className="text-gray-400 italic">No disponible</span>
+                                    <span className="text-gray-400 italic text-sm">Sin evidencia</span>
                                 )}
-                            </p>
+                            </div>
                         </div>
                         <div className="flex-shrink-0 flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
                             {canEdit && (

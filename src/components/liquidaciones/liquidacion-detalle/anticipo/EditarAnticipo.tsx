@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import type { AnticipoFormData } from "../../../../types";
 import AnticipoForm from "./AnticipoForm";
 import { toast } from "react-toastify";
+import SubmitButton from "../../../botones/SubmitButton";
 
 type EditarAnticipoProps = {
     onSuccess: () => void;
@@ -70,14 +71,7 @@ export default function EditarAnticipo({ onSuccess, liquidacionId }: EditarAntic
             >   
                                 
                 <AnticipoForm errors={errors} register={register} />
-
-                
-                <input
-                    type="submit"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400"
-                    value={isPending ? 'Actualizando...' : 'Actualizar'}
-                    disabled={isPending}       
-                />
+                <SubmitButton isPending={isPending} label="Actualizar" pendingLabel="Actualizando..." />
             </form>
         </>
     )

@@ -4,7 +4,8 @@ import GastoCombustibleForm from "./GastoCombustibleForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createGastoCombustible } from "../../../../api/combustible/CombustibleAPI";
 import { toast } from "react-toastify";
-import imageCompression from 'browser-image-compression';
+import SubmitButton from "../../../botones/SubmitButton";
+import { prepararArchivo } from "../../../../utils/prepararArchivo";
 
 type GastoCombustibleProps = {
     onSuccess: () => void;
@@ -35,30 +36,20 @@ export default function GastoCombustible({ onSuccess, liquidacionId }: GastoComb
         }
     });
 
-    const handleForm = async (dataFromHook: GastoCombustibleFormData) => {
+    const handleForm = async (formData: GastoCombustibleFormData) => {
 
-        const formPayload  = new FormData()
-        formPayload.append('precio_litro', String(dataFromHook.precio_litro));
-        formPayload.append('monto', String(dataFromHook.monto));
-        formPayload.append('metodo_pago', dataFromHook.metodo_pago);
-        formPayload.append('liquidacionId', String(liquidacionId));
+        const dataToSend  = new FormData()
+        dataToSend.append('precio_litro', String(formData.precio_litro));
+        dataToSend.append('monto', String(formData.monto));
+        dataToSend.append('metodo_pago', formData.metodo_pago);
+        dataToSend.append('liquidacionId', String(liquidacionId));
 
-        if(dataFromHook.evidencia && dataFromHook.evidencia.length > 0) {
-            const file = dataFromHook.evidencia[0];
-            if(file.type.startsWith('image/')) {
-                const compressed = await imageCompression(file, {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1280,
-                    useWebWorker: true,
-                    fileType: 'image/webp'
-                });
-                formPayload.append('file', new File([compressed], 'evidencia.webp', { type: 'image/webp'}));
-            } else {
-                formPayload.append('file', file)
-            }
+        if(formData.evidencia) {
+            const archivo = await prepararArchivo(formData.evidencia);
+            if(archivo) dataToSend.append('file', archivo);    
         }
 
-        mutate(formPayload)
+        mutate(dataToSend)
 
     }
 
@@ -71,12 +62,7 @@ export default function GastoCombustible({ onSuccess, liquidacionId }: GastoComb
             >   
                 <GastoCombustibleForm errors={errors} register={register} watch={watch}/>
 
-                <input
-                    type="submit"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400"
-                    value={isPending ? 'Guardando...' : 'Agregar'}
-                    disabled={isPending}
-                />
+                <SubmitButton isPending={isPending} />
             </form>
         </>
     );

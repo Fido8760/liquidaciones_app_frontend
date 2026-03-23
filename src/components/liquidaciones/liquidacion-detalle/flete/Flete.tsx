@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { FleteFormData } from "../../../../types";
 import { toast } from "react-toastify";
 import { createCostoflete } from "../../../../api/fletes/FleteAPI";
+import SubmitButton from "../../../botones/SubmitButton";
 
 type FleteProps = {
     onSuccess: () => void;
@@ -46,12 +47,7 @@ export default function Flete({ onSuccess, liquidacionId }: FleteProps) {
             >
                 
                 <CostoFleteForm register={register} errors={errors} />
-                <input
-                    type="submit"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400 rounded-md"
-                    value={isPending ? "Guardando..." : "Agregar"}
-                    disabled={isPending}
-                />
+                <SubmitButton isPending={isPending} />
             </form>
         </>
     );

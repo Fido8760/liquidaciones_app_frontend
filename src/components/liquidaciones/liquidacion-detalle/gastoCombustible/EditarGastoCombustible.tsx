@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 import type { GastoCombustibleFormData } from "../../../../types";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import imageCompression from 'browser-image-compression';
+import SubmitButton from "../../../botones/SubmitButton";
+import { prepararArchivo } from "../../../../utils/prepararArchivo";
 
 type EditarGastoCombustibleProps = {
     onSuccess: () => void;
@@ -48,7 +49,6 @@ export default function EditarGastoCombustible({ onSuccess, liquidacionId }: Edi
             onSuccess()
             queryClient.invalidateQueries({ queryKey: ['liquidacion', liquidacionId] });
             reset();
-
         }
     })
 
@@ -58,19 +58,9 @@ export default function EditarGastoCombustible({ onSuccess, liquidacionId }: Edi
         dataToSend.append('precio_litro', String(formData.precio_litro));
         dataToSend.append('metodo_pago', String(formData.metodo_pago));
 
-        if(formData.evidencia && formData.evidencia.length > 0) {
-            const file = formData.evidencia[0];
-            if (file.type.startsWith('image/')) {
-                const compressed = await imageCompression(file, {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1280,
-                    useWebWorker: true,
-                    fileType: 'image/webp'
-                });
-                dataToSend.append('file', new File([compressed], 'evidencia.webp', { type: 'image/webp' }));
-            } else {
-                dataToSend.append('file', file);
-            }
+        if(formData.evidencia){
+            const archivo = await prepararArchivo(formData.evidencia);
+            if(archivo) dataToSend.append('file', archivo);
         }
 
         mutate({combustibleId, formData: dataToSend});
@@ -93,18 +83,13 @@ export default function EditarGastoCombustible({ onSuccess, liquidacionId }: Edi
             onSubmit={handleSubmit(handleEdtiCombustible)}>
             <GastoCombustibleForm errors={errors} register={register} watch={watch} />
 
-            {data?.evidencia && (
+            {data?.evidencia && data.evidencia !== 'default.pdf' && (
                 <p className="text-sm text-gray-600">
                     Archivo actual: <a href={data.evidencia} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{data.evidencia}</a>
                 </p>
             )}
 
-            <input
-                type="submit"
-                className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400"
-                value={isPending ? 'Actualizando...' : 'Actualizar'}
-                disabled={isPending}
-            />
+            <SubmitButton isPending={isPending} label="Actualizar" pendingLabel="Actualizando..." />
         </form>
     );
 }

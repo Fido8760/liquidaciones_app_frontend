@@ -9,6 +9,7 @@ type ResumenMovimientosProps = {
 };
 
 export default function ResumenMovimientos({ liquidacion, totalAnticipos }: ResumenMovimientosProps) {
+    const totalGastosOperador = liquidacion.total_gastos - liquidacion.total_gastos_empresa;
     return (
         <section>
             <h2 className="text-xl font-bold text-gray-800 dark:text-white border-b pb-2 dark:border-gray-600 mb-4 flex items-center gap-2">
@@ -21,9 +22,29 @@ export default function ResumenMovimientos({ liquidacion, totalAnticipos }: Resu
                     value={formatCurrency(liquidacion.total_fletes)} 
                 />
                 <StatCard 
-                    label="Egresos (Combustible)" 
+                    label="Combustible" 
                     value={formatCurrency(liquidacion.total_combustible)} 
                 />
+                {liquidacion.total_gastos_empresa > 0 && (
+                    <StatCard 
+                        label="Gastos Empresa" 
+                        value={formatCurrency(liquidacion.total_gastos_empresa)} 
+                    />
+                )}
+
+                {totalGastosOperador > 0 && (
+                    <StatCard 
+                        label="Cargos al operador"
+                        value={formatCurrency(totalGastosOperador)}
+                    />
+
+                )}
+                {liquidacion.gasto_ferry > 0 && (
+                    <StatCard 
+                        label="Ferry"
+                        value={formatCurrency(liquidacion.gasto_ferry)}
+                    />
+                )}
                 
                 {totalAnticipos > 0 && (
                     <StatCard

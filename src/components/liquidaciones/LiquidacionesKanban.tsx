@@ -60,7 +60,7 @@ export default function LiquidacionesKanban({ liquidaciones }: LiquidacionesList
             <div className="flex justify-between items-center gap-4 md:gap-0 mb-6 px-4 md:px-0">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-800 dark:text-slate-200">Tablero de Liquidaciones</h1>
-                    <p className="text-gray-500 dark:text-slate-400 mt-1">Aquí podrás revisar las liquidaciones que se han capurado.</p>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">Aquí podrás revisar las liquidaciones que se han capturado.</p>
                 </div>
                 {puedeCrear && (
                     <Link

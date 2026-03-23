@@ -54,14 +54,14 @@ export default function ModalModificarPago({ liquidacion, onClose }: ModalModifi
     const totalNumerico = parseFloat(nuevoTotal) || 0;
     const totalAnticipos = liquidacion.anticipos?.reduce((sum, ant) => sum + ant.monto, 0) || 0;
     
-    const totalSugerido = liquidacion.total_bruto - totalAnticipos;
+    const totalGastosOperador = (liquidacion.gastos ?? []).filter(g => g.afecta_operador).reduce((sum, g) => sum + g.monto, 0);
+
+    const totalSugerido = liquidacion.total_bruto - totalAnticipos - totalGastosOperador;
     const totalActual = liquidacion.total_neto_pagar;
     
     const diferenciaVsSugerido = totalNumerico - totalSugerido;
     const diferenciaVsActual = totalNumerico - totalActual;
-    const porcentajeCambio = totalSugerido > 0
-        ? ((diferenciaVsSugerido / totalSugerido) * 100).toFixed(2)
-        : '0';
+    const porcentajeCambio = totalSugerido > 0 ? ((diferenciaVsSugerido / totalSugerido) * 100).toFixed(2) : '0';
     
     const tipoCambio = diferenciaVsActual > 0 ? 'AUMENTO' : diferenciaVsActual < 0 ? 'REDUCCIÓN' : 'SIN CAMBIO';
     const hayDiferencia = Math.abs(diferenciaVsActual) > 0.01;
@@ -144,6 +144,15 @@ export default function ModalModificarPago({ liquidacion, onClose }: ModalModifi
                                     <span>- Anticipos:</span>
                                     <span className="font-medium">
                                         {formatCurrency(totalAnticipos)}
+                                    </span>
+                                </div>
+                            )}
+
+                            {totalGastosOperador > 0 && (
+                                <div className="flex justify-between text-red-600 dark:text-red-400">
+                                    <span>- Cargos al operador:</span>
+                                    <span className="font-medium">
+                                        {formatCurrency(totalGastosOperador)}
                                     </span>
                                 </div>
                             )}

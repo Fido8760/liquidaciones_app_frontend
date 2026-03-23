@@ -1,0 +1,157 @@
+import { useNavigate } from "react-router-dom"
+import type { Liquidacion } from "../../../../types"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLiquidacionPermissions } from "../../../../hooks/useLiquidacionPermissions";
+import { formatCurrency } from "../../../../utils/formatCurrency";
+import { formatDate } from "../../../../utils/formatDate";
+import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { deleteGasto } from "../../../../api/gastos/GastoAPI";
+import { Link } from "react-router-dom";
+
+type DetalleGastoProps = {
+    liquidacion: Liquidacion
+}
+export default function DetalleGasto({liquidacion} : DetalleGastoProps) {
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const esImagen = (url: string) => /\.(jpg|jpeg|png|webp)$/i.test(url);
+
+    const { canEdit } = useLiquidacionPermissions(liquidacion);
+
+    const {mutate} = useMutation({
+        mutationFn: deleteGasto,
+        onError: (error) => {
+            toast.error(error.message)
+        },
+        onSuccess: (data) => {
+            toast.success(data.message)
+            queryClient.invalidateQueries({ queryKey: ['liquidacion', liquidacion.id]})
+        }
+    })
+
+    const handleDeleteClick = (gastoId: number) => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, ¡eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                mutate(gastoId);
+            }
+        });
+    };
+
+    if (liquidacion.gastos) return (
+        <>
+        
+            <div className="p-4">
+                <nav className=" my-5 flex gap-3 justify-between items-center">
+                    <p className=" text-sm font-semibold mb-4 dark:text-white">Detalle del los gastos</p>
+                    {canEdit && (
+                        <>
+                        <div className="flex items-center gap-4">
+                            <button
+                                type="button"
+                                className=" bg-purple-400 hover:bg-purple-500 cursor-pointer px-5 py-1 text-white text-sm font-bold transition-colors rounded-lg"
+                                onClick={() => navigate("?modalGasto=gasto")}
+                            >Agregar Gasto</button>
+                            <Link
+                                to={"/tipo-gastos"}
+                                className=" bg-emerald-700 hover:bg-emerald-600 cursor-pointer px-5 py-1 text-white text-sm font-bold transition-colors rounded-lg"
+                            >Administrar Tipos de Gasto</Link>
+                            
+                        </div>
+                        </>
+                    )}
+                </nav>
+                <ul className=" space-y-2">
+                    {liquidacion.gastos.length > 0 ? (
+                        liquidacion.gastos.map( (gasto) => (
+                            <li
+                                key={gasto.id}
+                                className=" flex flex-col sm:flex-row justify-between items-center gap-4 border rounded-xl p-4 shadow-sm dark:border-gray-400"
+                            >
+                                <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
+                                    <p className="dark:text-white">
+                                        <span className="font-medium dark:text-gray-300">Tipo de gasto: </span>
+                                        {gasto.tipo_gasto.nombre}
+                                    </p>
+                                    <p className="dark:text-white">
+                                        <span className="font-medium dark:text-gray-300">Descripción: </span>
+                                        {gasto.descripcion}
+                                    </p>
+                                    <p className="dark:text-white">
+                                        <span className="font-medium dark:text-blue-300">Monto: </span>
+                                        {formatCurrency(gasto.monto)}
+                                    </p>
+                                    <div>
+                                        <span className="font-medium dark:text-amber-300 text-sm">Evidencia: </span>
+                                        {gasto.evidencia && gasto.evidencia !== 'default.pdf' ? (
+                                            esImagen(gasto.evidencia) ? (
+                                                <a href={gasto.evidencia} target="_blank" rel="noopener noreferrer">
+                                                    <img
+                                                        src={gasto.evidencia}
+                                                        alt="Evidencia"
+                                                        className="mt-1 h-20 w-20 object-cover rounded-lg border border-gray-200 dark:border-gray-600 hover:opacity-80 transition-opacity cursor-pointer"
+                                                    />
+                                                </a>
+                                            ) : (
+                                                <a
+                                                    href={gasto.evidencia}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="mt-1 flex items-center gap-2 text-red-500 hover:text-red-700 transition-colors"
+                                                >
+                                                    <svg className="h-8 w-8 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+                                                    </svg>
+                                                    <span className="text-sm underline">Ver PDF</span>
+                                                </a>
+                                            )
+                                        ) : (
+                                            <span className="text-gray-400 italic text-sm">Sin evidencia</span>
+                                        )}
+                                    </div>
+                                    <p className="dark:text-white">
+                                        <span className="font-medium dark:text-gray-300">Fecha de creación: </span>
+                                        {formatDate(gasto.createdAt)}
+                                    </p>
+                                </div>
+
+                                <div className="flex-shrink-0 flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
+                                {canEdit && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={() => navigate(location.pathname + `?editar=gasto&gastoId=${gasto.id}`)}
+                                            className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                            aria-label="Editar gasto"
+                                        ><PencilIcon className=" h-4 w-4"/> Editar</button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteClick(gasto.id)}
+                                            className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                                            aria-label="Eliminar gasto"
+                                        ><TrashIcon className=" h-4 w-4"/>Eliminar</button>
+                                    
+                                    </>
+                                )}
+
+                            </div>
+                            </li>
+                        ))
+                    ):(
+                        <p className="text-sm text-gray-500 dark:text-gray-300">No hay gastos registrados.</p>
+                    )}
+                </ul>
+            </div>
+        </>
+    )
+}

@@ -6,6 +6,7 @@ import type { FleteFormData } from "../../../../types";
 import { useEffect } from "react";
 import CostoFleteForm from "./FleteForm";
 import { toast } from "react-toastify";
+import SubmitButton from "../../../botones/SubmitButton";
 
 type EditarCostoFleteProps = {
     liquidacionId: number
@@ -81,14 +82,7 @@ export default function EditarCostoFlete({ onSuccess, liquidacionId } : EditarCo
             >   
                                 
                 <CostoFleteForm errors={errors} register={register} />
-
-                
-                <input
-                    type="submit"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400 rounded-md"
-                    value={isPending ? 'Actualizando...' : 'Actualizar'}
-                    disabled={isPending}       
-                />
+                <SubmitButton isPending={isPending} label="Actualizar" pendingLabel="Actualizando..." />
             </form>
         </>
     )

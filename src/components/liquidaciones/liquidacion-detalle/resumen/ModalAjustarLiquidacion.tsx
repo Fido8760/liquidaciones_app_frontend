@@ -69,7 +69,9 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
   const totalAnticipos = liquidacion.anticipos?.reduce((sum, ant) => sum + ant.monto, 0) || 0;
   
   // 6. Total Neto = Total Bruto - Anticipos
-  const totalNeto = totalBruto - totalAnticipos;
+  const totalGastosOperador = (liquidacion.gastos ?? []).filter(g => g.afecta_operador).reduce((sum, g) => sum + g.monto, 0);
+  
+  const totalNeto = totalBruto - totalAnticipos -totalGastosOperador;
 
   const handleForm = (formData: AjustarFormData) => {
     const dataToSend = {
@@ -365,6 +367,17 @@ export default function ModalAjustarLiquidacion({ liquidacion, onClose }: ModalA
                             </span>
                             <span className="font-semibold text-red-600 dark:text-red-400">
                               -{formatCurrency(totalAnticipos)}
+                            </span>
+                          </div>
+                        )}
+
+                        {totalGastosOperador > 0 && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-700 dark:text-gray-300">
+                              - Cargos al operador
+                            </span>
+                            <span className="font-semibold text-red-600 dark:text-red-400">
+                              -{formatCurrency(totalGastosOperador)}
                             </span>
                           </div>
                         )}

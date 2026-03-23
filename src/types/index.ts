@@ -1,4 +1,4 @@
-import {  number, z } from 'zod';
+import {  z } from 'zod';
 
 /** Auth Users */
 
@@ -135,10 +135,17 @@ export const tipoGastoSchema = z.object({
 });
 export type TipoGasto = z.infer<typeof tipoGastoSchema>;
 
+export const tipoGastosActivosSchema = z.array(tipoGastoSchema)
+
+export const tiposGastosSchema = z.object({
+    data: z.array(tipoGastoSchema),
+    total: z.number(),
+})
+
 export const gastoSchema = z.object({
     id: z.number(),
     tipo_gasto: tipoGastoSchema,
-    monto: z.string().transform(number),
+    monto: z.string().transform(Number),
     descripcion: z.string(). nullable(),
     afecta_operador: z.boolean(),
     evidencia: z.string().nullable(),
@@ -212,6 +219,7 @@ export const liquidacionSchema = z.object({
     total_fletes: z.string().transform(Number),
     total_combustible: z.string().transform(Number),
     total_gastos: z.string().transform(Number),
+    total_gastos_empresa: z.string().transform(Number),
     total_bruto: z.string().transform(Number),
     total_neto_sugerido: z.string().transform(Number).nullable(),
     total_neto_pagar: z.string().transform(Number),

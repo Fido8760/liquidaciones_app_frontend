@@ -4,6 +4,7 @@ import AnticipoForm from "./AnticipoForm";
 import type { AnticipoFormData } from "../../../../types";
 import { createAnticipo } from "../../../../api/anticipos/AnticipoAPI";
 import { toast } from "react-toastify";
+import SubmitButton from "../../../botones/SubmitButton";
 
 type AnticipoProps = {
   onSuccess: () => void;
@@ -42,12 +43,7 @@ export default function Anticipo({ onSuccess, liquidacionId }: AnticipoProps) {
                 onSubmit={handleSubmit(handleForm)}
             >
                 <AnticipoForm errors={errors} register={register} />
-                <input
-                    type="submit"
-                    className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors disabled:bg-gray-400"
-                    value={isPending ? "Guardando..." : "Agregar"}
-                    disabled={isPending}
-                />
+                <SubmitButton isPending={isPending} />
             </form>
         </>
     );

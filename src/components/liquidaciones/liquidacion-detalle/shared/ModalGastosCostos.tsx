@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import GastoCombustible from '../gastoCombustible/GastoCombustible';
 import CostoFlete from '../flete/Flete';
 import Anticipo from '../anticipo/Anticipo';
+import Gasto from '../gasto/Gasto';
 
 
 export default function ModalGastosCostos( ) {
@@ -32,6 +33,9 @@ export default function ModalGastosCostos( ) {
             
             case 'anticipo':
                 return <Anticipo onSuccess={cerrarModal} liquidacionId={liquidacionId} />
+
+            case 'gasto':
+                return <Gasto onSuccess={cerrarModal} liquidacionId={liquidacionId} />
                 
             default:
                 return null
@@ -70,11 +74,9 @@ export default function ModalGastosCostos( ) {
                                     <div className="flex justify-between items-center border-b pb-4">
                                         <Dialog.Title className="text-xl font-semibold text-gray-800 dark:text-gray-100">
                                             {modalGasto === 'combustible' && 'Registrar Gasto de Combustible'}
-                                            {modalGasto === 'caseta' && 'Registrar Gasto de las Casetas'}
-                                            {modalGasto === 'varios' && 'Registrar otros tipos de gastos'}
                                             {modalGasto === 'flete' && 'Ingresa el costo de los fletes'}
-                                            {modalGasto === 'deduccion' && 'Ingresa las deducciones'}
                                             {modalGasto === 'anticipo' && 'Ingresa los anticipos de viaje'}
+                                            {modalGasto === 'gasto' && 'Ingresa los gastos de viaje (Casetas, Alimentos, Infracciones, etc)'}
                                         </Dialog.Title>
                                         <button
                                             onClick={cerrarModal}

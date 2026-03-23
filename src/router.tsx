@@ -11,6 +11,7 @@ import NewPasswordView from "./views/auth/NewPasswordView";
 import UsersView from "./views/users/UsersView";
 import UserCreateView from "./views/users/UserCreateView";
 import UserEditView from "./views/users/UserEditView";
+import TipoGastosView from "./views/tipo_gastos/TipoGastosView";
 
 export default function Router() {
     return (
@@ -21,6 +22,7 @@ export default function Router() {
                     <Route path="/liquidaciones/crear" element={<CrearLiquidacionView />} />
                     <Route path="/liquidaciones/:liquidacionId" element={<DetalleLiquidacionView />} />
                     <Route path="/liquidaciones/:liquidacionId/editar" element={<EditarLiquidacionView />} />
+                    <Route path="/tipo-gastos" element={<TipoGastosView />} />
                     <Route path="/usuarios" element={<UsersView />} />
                     <Route path="/usuarios/crear" element={<UserCreateView />} />
                     <Route path="/usuarios/:userId/editar" element={<UserEditView />} />

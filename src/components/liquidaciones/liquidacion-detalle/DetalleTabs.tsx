@@ -1,9 +1,12 @@
-import { ClipboardDocumentListIcon, FireIcon, TruckIcon, } from '@heroicons/react/24/outline';
+
+import { ClipboardDocumentListIcon, CurrencyDollarIcon, FireIcon, PlusCircleIcon, TruckIcon, } from '@heroicons/react/24/outline';
 
 const TABS = [
     { id: 'resumen', label: 'Resumen General', icon: ClipboardDocumentListIcon },
     { id: 'gastos_combustible', label: 'Gastos de Combustible', icon: FireIcon },
     { id: 'ingresos', label: 'Fletes', icon: TruckIcon },
+    { id: 'gastos', label: 'Gastos', icon: CurrencyDollarIcon },
+    { id: 'anticipos', label: 'Anticipos', icon: PlusCircleIcon },
 ];
 
 type DetalleTabsProps = {

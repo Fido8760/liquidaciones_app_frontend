@@ -72,7 +72,7 @@ export async function deleteCombustible(combustibleId: number) {
             const errorMessage = errorData.message
             throw new Error(errorMessage)
         }
-        throw new Error("Error desconocido")
+        throw new Error("Error desconocido");
         
     }
 }

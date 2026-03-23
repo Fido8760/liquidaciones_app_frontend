@@ -32,9 +32,7 @@ export default function ComisionOperador({ liquidacion, totalAnticipos, comision
     // Cuando se modifica, se guarda en total_neto_sugerido
     const totalSugeridoPorSistema = liquidacion.total_bruto - totalAnticipos
     const diferencia = liquidacion.total_neto_pagar - totalSugeridoPorSistema;
-    const porcentajeDiferencia = totalSugeridoPorSistema > 0 
-        ? ((diferencia / totalSugeridoPorSistema) * 100).toFixed(1) 
-        : '0';
+    const porcentajeDiferencia = totalSugeridoPorSistema > 0 ? ((diferencia / totalSugeridoPorSistema) * 100).toFixed(1) : '0';
     
     return (
         <div className="mb-4 p-5 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800">
@@ -124,7 +122,7 @@ export default function ComisionOperador({ liquidacion, totalAnticipos, comision
                 <div className="space-y-2 pl-13">
                     <FinancialRow 
                         label="Base para comisión (Flete - Diesel)"
-                        amount={liquidacion.total_costo_fletes - liquidacion.total_combustible}
+                        amount={liquidacion.total_fletes - liquidacion.total_combustible}
                         className="text-blue-600 dark:text-blue-400"
                     />
 
@@ -202,7 +200,7 @@ export default function ComisionOperador({ liquidacion, totalAnticipos, comision
 
                     <div className="border-t-2 border-purple-300 dark:border-purple-700 pt-3 mt-3 mb-3">
                         <FinancialRow 
-                            label="= Total Bruto (antes de anticipos)"
+                            label="= Total Bruto (antes de descuentos)"
                             amount={liquidacion.total_bruto}
                             isBold
                             large
@@ -222,6 +220,33 @@ export default function ComisionOperador({ liquidacion, totalAnticipos, comision
                             />
                         </>
                     )}
+
+                    {(() => {
+                        const gastosOperador = (liquidacion.gastos ?? []).filter(gasto => gasto.afecta_operador);
+                        return gastosOperador.length > 0 ? (
+                            <>
+                                <p className=" text-xs font-semibold text-purple-800 dark:text-purple-300 mt-3 mb-2">
+                                    Menos: Cargos al Operador
+                                </p>
+                                {gastosOperador.map( gasto => (
+                                    <FinancialRow 
+                                        key={gasto.id}
+                                        label={`${gasto.tipo_gasto.nombre}${gasto.descripcion ? ` — ${gasto.descripcion}` : ''}`}
+                                        amount={gasto.monto}
+                                        isNegative
+                                    />
+                                ))}
+                                <div className=" border-t border-purple-200 dark:border-purple-700 pt-2 mt-2">
+                                    <FinancialRow 
+                                        label="Total cargos al operador"
+                                        amount={liquidacion.total_gastos - liquidacion.total_gastos_empresa}
+                                        isNegative
+                                        isBold
+                                    />
+                                </div>
+                            </>
+                        ) : null;
+                    })()}
 
                     <div className="border-t-2 border-purple-400 dark:border-purple-600 pt-4 mt-4 -mx-5 px-5 pb-4">
                         {/* Header con estado */}

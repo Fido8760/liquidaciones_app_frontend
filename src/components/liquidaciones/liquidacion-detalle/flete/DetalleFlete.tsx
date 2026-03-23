@@ -62,9 +62,9 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
       </nav>
       <ul className="space-y-2">
         {liquidacion.fletes.length > 0 ? (
-          liquidacion.fletes.map((costo) => (
+          liquidacion.fletes.map((flete) => (
             <li
-              key={costo.id}
+              key={flete.id}
               className="flex flex-col sm:flex-row justify-between items-center gap-4 border rounded-xl p-4 shadow-sm dark:border-gray-400"
             >
               <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
@@ -72,31 +72,31 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
                   <span className="font-medium dark:text-amber-200">
                     Monto:
                   </span>{" "}
-                  {formatCurrency(costo.monto)}
+                  {formatCurrency(flete.monto)}
                 </p>
                 <p className="dark:text-white">
                   <span className="font-medium dark:text-gray-300">
                     Descripción:
                   </span>{" "}
-                  {costo.cliente}
+                  {flete.cliente}
                 </p>
                 <p className="dark:text-white">
                   <span className="font-medium dark:text-gray-300">
                     Descripción:
                   </span>{" "}
-                  {costo.descripcion}
+                  {flete.descripcion}
                 </p>
                 <p className="dark:text-white">
                   <span className="font-medium dark:text-gray-300">
                     Origen:
                   </span>{" "}
-                  {costo.origen}
+                  {flete.origen}
                 </p>
                 <p className="dark:text-white">
                   <span className="font-medium dark:text-gray-300">
                     Destino:
                   </span>{" "}
-                  {costo.destino}
+                  {flete.destino}
                 </p>
               </div>
               <div className="flex-shrink-0 flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
@@ -104,13 +104,13 @@ export default function DetalleFlete({ liquidacion }: DetalleFleteProps) {
                   <>
                     <button
                       type="button"
-                      onClick={() => navigate( location.pathname + `?editar=flete&costoId=${costo.id}` )}
+                      onClick={() => navigate( location.pathname + `?editar=flete&costoId=${flete.id}` )}
                       className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-gray-800 rounded-lg transition-colors"
                       aria-label="Editar gasto"
                     ><PencilIcon className=" h-4 w-4" /> Editar</button>
                     <button
                       type="button"
-                      onClick={() => handleDeleteClick(costo.id)}
+                      onClick={() => handleDeleteClick(flete.id)}
                       className="flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-gray-800 rounded-lg transition-colors"
                       aria-label="Eliminar gasto"
                     ><TrashIcon className=" h-4 w-4" />Eliminar</button>
