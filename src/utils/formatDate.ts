@@ -9,16 +9,35 @@ export function formatDate(isoString: string) {
     return formatter.format(date)
 }
 
-export function formatDateTime(dateString: string | null | undefined) {
-    if (!dateString) return 'N/A';
-    
-    const date = new Date(dateString);
-    
-    const formatter = new Intl.DateTimeFormat('es-MX', {
+export function formatDateTime(input: Date | string) {
+    if (!input) return '';
+
+    const date = new Date(input);
+
+    if (isNaN(date.getTime())) {
+        console.error('Fecha inválida:', input);
+        return '';
+    }
+
+    return new Intl.DateTimeFormat('es-MX', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
-    });
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false, // formato 24h (más común en MX en sistemas)
+    }).format(date);
+}
 
-    return formatter.format(date);
+export function formatDateOnly(dateString: string, weekday = false) {
+    const [year, month, day] = dateString.split('-');
+
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+    return new Intl.DateTimeFormat('es-MX', {
+        ...(weekday && { weekday: 'long' }),
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit'
+    }).format(date);
 }

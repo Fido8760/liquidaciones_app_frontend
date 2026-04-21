@@ -1,6 +1,6 @@
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { EstadoLiquidacion, type Liquidacion } from "../../../../types"
-import { formatDate } from "../../../../utils/formatDate"
+import { formatDateTime } from "../../../../utils/formatDate"
 
 type EstadoPagoProps = {
     liquidacion: Liquidacion
@@ -23,7 +23,7 @@ export default function EstadoPago({liquidacion}: EstadoPagoProps) {
                 <p className=" text-sm text-emerald-700 dark:text-emerald-500">
                     Pagada por: <b>{liquidacion.usuario_pagador?.nombre} {liquidacion.usuario_pagador?.apellido}</b>
                     <br />
-                    Fecha: { liquidacion.fecha_pago ? formatDate(liquidacion.fecha_pago) : 'N/A'}
+                    Fecha: { liquidacion.fecha_pago ? formatDateTime(liquidacion.fecha_pago) : 'N/A'}
                 </p>
             </div>
         </div>

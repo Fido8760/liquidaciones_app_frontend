@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import LiquidacionForm from "../../components/liquidaciones/LiquidacionForm";
 import type { LiquidacionFormData } from "../../types";
 import { createLiquidacion, getOperadores, getUnidades } from "../../api/liquidaciones/LiquidacionAPI";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 export default function CrearLiquidacionView() {
     const navigate = useNavigate()
@@ -53,26 +54,14 @@ export default function CrearLiquidacionView() {
     // 3. ESTADO DE CARGA UNIFICADO Y PROFESIONAL (SKELETON)
     if (isUnidadesLoading || isOperadoresLoading) {
         return (
-            <div className="max-w-4xl mx-auto animate-pulse">
-                <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
-                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-10"></div>
-                <div className="mt-6 bg-white dark:bg-gray-800 shadow-lg p-8 rounded-lg border border-gray-100 dark:border-gray-700 space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                        <div className="h-14 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                        <div className="h-14 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                        <div className="h-14 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                        <div className="h-14 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    </div>
-                    <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded mt-8"></div>
-                </div>
-            </div>
+            <LoadingSpinner />
         );
     }
     
     // Solo renderizar si tenemos los datos necesarios
     if (unidades && operadores) return (
-        <div className="max-w-4xl mx-auto">
-            <div className="flex justify-between items-center">
+        <div className="max-w-4xl mx-auto p-2 md:p-0  ">
+            <div className="flex justify-between items-center gap-2">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Crear Liquidación</h1>
                     <p className="text-gray-500 dark:text-gray-400 mt-1">Completa los campos para registrar una nueva liquidación.</p>

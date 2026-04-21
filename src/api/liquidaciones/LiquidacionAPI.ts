@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 import api from "../../lib/axios";
-import { liquidacionesSchema, liquidacionSchema, operadoresSchema, unidadesSchema, type AjustarFormData, type Liquidacion, type LiquidacionFormData, type ModificarTotalFormData } from "../../types";
+import { kpisOperadorSchema, liquidacionesListSchema, liquidacionesOperadorSchema, liquidacionesSchema, liquidacionSchema, operadoresSchema, unidadesSchema, type AjustarFormData, type Liquidacion, type LiquidacionFormData, type ModificarTotalFormData } from "../../types";
 
 
 export async function getUnidades() {
@@ -45,6 +45,66 @@ export async function getOperadores() {
     }
 }
 
+export async function getKpisOperador(operadorId: number, filtros: {fechaInicio?: string, fechaFin?: string} = {}) {
+    const url = `/operadores/${operadorId}/kpis`;
+
+    const params = new URLSearchParams();
+    if (filtros.fechaInicio) params.append('fechaInicio', filtros.fechaInicio);
+    if (filtros.fechaFin) params.append('fechaFin', filtros.fechaFin);
+
+    try {
+        const { data } = await api(url, {params: filtros})
+        const response = kpisOperadorSchema.safeParse(data)
+        if(response.success) {
+            return response.data
+        }  else {
+            console.error("❌ Zod KPIs:", response.error.format())
+            console.log("🔍 Datos recibidos:", data)
+            throw new Error("Error en la estructura de datos de KPIs")
+        }
+
+    } catch (error) {
+
+        if (isAxiosError(error) && error.response) {
+            const errorData = error.response.data as { message: string };
+            const errorMessage = errorData.message
+            throw new Error(errorMessage)
+        }
+        throw new Error("Error desconocido")
+        
+    }
+}
+
+export async function getLiquidacionesOperador(operadorId: number, filtros: {fechaInicio?: string, fechaFin?: string} = {}) {
+    const url = `/operadores/${operadorId}/liquidaciones`;
+
+    const params = new URLSearchParams();
+    if (filtros.fechaInicio) params.append('fechaInicio', filtros.fechaInicio);
+    if (filtros.fechaFin)    params.append('fechaFin', filtros.fechaFin);
+
+    try {
+        const { data } = await api(url, {params: filtros})
+        const response = liquidacionesOperadorSchema.safeParse(data)
+        if(response.success) {
+            return response.data
+        }  else {
+            console.error("❌ Zod KPIs:", response.error.format())
+            console.log("🔍 Datos recibidos:", data)
+            throw new Error("Error en la estructura de datos de KPIs")
+        }
+
+    } catch (error) {
+
+        if (isAxiosError(error) && error.response) {
+            const errorData = error.response.data as { message: string };
+            const errorMessage = errorData.message
+            throw new Error(errorMessage)
+        }
+        throw new Error("Error desconocido")
+        
+    }
+}
+
 export async function createLiquidacion(formData: LiquidacionFormData) {
 
     try {
@@ -67,6 +127,53 @@ export async function getLiquidaciones() {
     try {
         const { data } = await api('/liquidaciones');
         const response = liquidacionesSchema.safeParse(data)
+        if(response.success) {
+            return response.data
+        } else {
+            // --- ESTO ES LO QUE NECESITAMOS VER ---
+            console.error("❌ Error de validación Zod:", response.error.format());
+            // También puedes ver la data cruda para comparar
+            console.log("🔍 Data recibida del Backend:", data);
+            
+            throw new Error("Error en la validación de los datos");
+        }
+
+    } catch (error) {
+
+        if (isAxiosError(error) && error.response) {
+            const errorData = error.response.data as { message: string };
+            const errorMessage = errorData.message
+            throw new Error(errorMessage)
+        }
+        throw new Error("Error desconocido")
+        
+    }
+}
+
+interface FiltrosLista {
+    page?: number
+    limit?: number
+    operadorId?: string
+    unidadId?: string
+    folio?: string
+    fechaInicio?: string
+    fechaFin?: string
+}
+
+export async function getLiquidacionesList(filtros: FiltrosLista = {}) {
+
+    const params = new URLSearchParams()
+    if (filtros.operadorId) params.append('operadorId', filtros.operadorId)
+    if (filtros.unidadId) params.append('unidadId', filtros.unidadId)
+    if (filtros.folio)      params.append('folio', filtros.folio)
+    if (filtros.fechaInicio) params.append('fechaInicio', filtros.fechaInicio)
+    if (filtros.fechaFin)   params.append('fechaFin', filtros.fechaFin)
+    params.append('page', String(filtros.page ?? 1))
+    params.append('limit', String(filtros.limit ?? 10))
+
+    try {
+        const { data } = await api(`/liquidaciones/lista?${params.toString()}`)
+        const response = liquidacionesListSchema.safeParse(data)
         if(response.success) {
             return response.data
         } else {

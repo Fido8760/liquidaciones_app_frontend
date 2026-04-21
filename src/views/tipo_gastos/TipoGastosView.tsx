@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth"
 import { createTipoGasto, deleteTipoGasto, getTipoGastos, toggleActivoTipoGasto, updateTipoGasto } from "../../api/gastos/tipo-gastos/TipoGastosAPI";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import TipoGastosTable from "../../components/tipo_gastos/TipoGastosTable";
 import { useState } from "react";
 import type { TipoGasto } from "../../types";
@@ -10,6 +10,11 @@ import ModalTipoGasto from "../../components/tipo_gastos/ModalTipoGasto";
 import Swal from "sweetalert2";
 
 export default function TipoGastosView() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const returnTo = queryParams.get('returnTo');
+
     const { data: currentUser } = useAuth();
     const queryClient = useQueryClient();
     const[showModal, setShowModal] = useState(false);
@@ -118,6 +123,17 @@ export default function TipoGastosView() {
             <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
+                        {returnTo && (
+                            <button
+                                onClick={() => navigate(decodeURIComponent(returnTo))}
+                                className="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 mb-4 transition-colors cursor-pointer"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                                Volver a la liquidación
+                            </button>
+                        )}
                         <h1 className=" text-3xl font-bold leading-6 text-gray-900 dark:text-white">Tipos de Gasto</h1>
                         <p className=" mt-2 text-sm text-gray-700 dark:text-gray-400">Catálogo de tipos de gasto disponibles para las liquidaciones.</p>
                     </div>

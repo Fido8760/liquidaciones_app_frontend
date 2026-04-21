@@ -2,7 +2,7 @@ import { ArrowTrendingDownIcon, ArrowTrendingUpIcon, BuildingOfficeIcon, Calenda
 import type { Liquidacion } from "../../../../types"
 import { calcularDiasViaje } from "../../../../utils/calcularDiasViaje"
 import InfoItem from "../InfoItem"
-import { formatDateTime } from "../../../../utils/formatDate"
+import { formatDateOnly, formatDateTime } from "../../../../utils/formatDate"
 import { formatCurrency } from "../../../../utils/formatCurrency"
 
 type InformacionViajeProps = {
@@ -45,17 +45,17 @@ export default function InformacionViaje({ liquidacion, canViewFinancials }: Inf
 
                     <InfoItem 
                         label="Fecha Inicio" 
-                        value={formatDateTime(liquidacion.fecha_inicio)}
+                        value={formatDateOnly(liquidacion.fecha_inicio)}
                         icon={<CalendarIcon className="w-5 h-5 text-gray-500" />}
                     />
                     <InfoItem 
                         label="Fecha Llegada" 
-                        value={formatDateTime(liquidacion.fecha_llegada)} 
+                        value={formatDateOnly(liquidacion.fecha_llegada)} 
                         icon={<CalendarIcon className="w-5 h-5 text-gray-500" />} 
                     />
                     <InfoItem 
                         label="Fecha Fin" 
-                        value={formatDateTime(liquidacion.fecha_fin)}
+                        value={formatDateOnly(liquidacion.fecha_fin)}
                         icon={<CalendarIcon className="w-5 h-5 text-gray-500" />} 
                     />
                     

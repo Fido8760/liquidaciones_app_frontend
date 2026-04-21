@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getLiquidacionById } from "../../api/liquidaciones/LiquidacionAPI";
 import DetalleHeader from "../../components/liquidaciones/liquidacion-detalle/DetalleHeader";
@@ -14,6 +14,8 @@ import ModalEditarGastosCostos from "../../components/liquidaciones/liquidacion-
 import NotasPanel from "../../components/notas/NotasPanel";
 import ModalAjustarLiquidacion from "../../components/liquidaciones/liquidacion-detalle/resumen/ModalAjustarLiquidacion";
 import DetalleGasto from "../../components/liquidaciones/liquidacion-detalle/gasto/DetalleGasto";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import ErrorQuery from "../../components/ui/ErrorQuery";
 
 export default function DetalleLiquidacionView() {
     const [activeTab, setActiveTab] = useState('resumen')
@@ -22,6 +24,7 @@ export default function DetalleLiquidacionView() {
     const prevDataRef = useRef<any>(null);
     const params = useParams();
     const liquidacionId = +params.liquidacionId!;
+    const navigate = useNavigate();
 
 
     const { data: liquidacion, isLoading, isError} = useQuery({
@@ -49,80 +52,8 @@ export default function DetalleLiquidacionView() {
         prevDataRef.current = liquidacion;
     }, [liquidacion]);
 
-    if (isLoading) {
-        return (
-            <div className="max-w-[1600px] mx-auto p-4 md:p-6">
-                {/* Skeleton del header */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 mb-8 animate-pulse">
-                    <div className="p-4 md:p-6">
-                        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                    </div>
-                </div>
-
-                {/* Skeleton del contenido */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 animate-pulse">
-                        <div className="space-y-4">
-                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
-                        </div>
-                    </div>
-                    
-                    <div className="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 animate-pulse">
-                        <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    
-    if (isError) {
-        return (
-            <div className="max-w-[1600px] mx-auto p-4 md:p-6">
-                <div className="flex items-center justify-center h-[70vh]">
-                    <div className="text-center max-w-md px-4">
-                        {/* Ícono de error */}
-                        <svg className="mx-auto h-20 w-20 text-red-500 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        
-                        {/* Mensaje */}
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                            No se pudo cargar la liquidación
-                        </h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-6">
-                            La liquidación no existe o no tienes permisos para verla.
-                        </p>
-
-                        {/* Acciones */}
-                        <div className="flex gap-3 justify-center">
-                            <button
-                                onClick={() => window.location.reload()}
-                                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-2.5 rounded-lg transition-colors"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                                Reintentar
-                            </button>
-                            
-                            <Link
-                                to="/"
-                                className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium px-5 py-2.5 rounded-lg transition-colors"
-                            >
-                                Volver al inicio
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-
-
+    if (isLoading) return <LoadingSpinner mensaje="Cargando la liquidación..." />
+    if (isError) return <ErrorQuery mensaje="La liquidación no existe o fue eliminada." onRetry={() => navigate('/liquidaciones')} />
     if( liquidacion ) return (
         <>
             <div className="max-w-[1600px] mx-auto p-4 md:p-6">

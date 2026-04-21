@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { CalendarIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon, TruckIcon, UserCircleIcon, XCircleIcon, } from "@heroicons/react/20/solid";
 import { EstadoLiquidacion, type Liquidacion } from "../../types";
-import { formatDate } from "../../utils/formatDate";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteLiquidacion, updateStatus } from "../../api/liquidaciones/LiquidacionAPI";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useLiquidacionPermissions } from "../../hooks/useLiquidacionPermissions";
 import { useAuth } from "../../hooks/useAuth";
+import { formatDateTime } from "../../utils/formatDate";
 
 type LiquidacionCardProps = {
     liquidacion: Liquidacion;
@@ -86,7 +86,7 @@ export default function LiquidacionCard({ liquidacion }: LiquidacionCardProps) {
 
     return (
         <li className={`relative bg-white dark:bg-gray-800 
-                        border border-gray-200 dark:border-gray-700 border-l-5
+                        border border-gray-200 dark:border-gray-700 border-l-4
                         rounded-xl shadow-sm hover:shadow-lg 
                         hover:border-purple-200 dark:hover:border-purple-500/30
                         transition-all duration-200 group 
@@ -139,7 +139,7 @@ export default function LiquidacionCard({ liquidacion }: LiquidacionCardProps) {
                 <div className="space-y-1 pt-3 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
                     <div className="flex items-center gap-1.5">
                         <CalendarIcon className="h-3 w-3" />
-                        <span>Actualizado: {formatDate(liquidacion.updatedAt)}</span>
+                        <span>Actualizado: {formatDateTime(liquidacion.updatedAt)}</span>
                     </div>
 
                     <div className="flex items-center gap-1.5">

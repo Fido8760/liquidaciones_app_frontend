@@ -5,7 +5,8 @@ import { es } from 'date-fns/locale';
 import { 
     UserCircleIcon, 
     PencilSquareIcon,
-    ClockIcon
+    ClockIcon,
+    TruckIcon
 } from '@heroicons/react/20/solid';
 
 type LiquidacionCardMobileProps = {
@@ -32,9 +33,7 @@ export default function LiquidacionCardMobile({ liquidacion }: LiquidacionCardMo
                     <span>{liquidacion.folio_liquidacion}</span>
                     <span className="text-gray-400">|</span>
                     <span className="flex items-center gap-1">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                        <TruckIcon className=' w-4 h-4'/>
                         {liquidacion.unidad.no_unidad}
                     </span>
                 </div>
@@ -52,11 +51,9 @@ export default function LiquidacionCardMobile({ liquidacion }: LiquidacionCardMo
             </div>
 
             {/* Línea 3: Tipo de unidad */}
-            <div className="flex items-center gap-1.5 mb-3">
-                <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-1.5 mb-3 text-gray-600 dark:text-gray-400">
+                <TruckIcon className=' h-4 w-4' />
+                <p className="text-xs ">
                     {liquidacion.unidad.tipo_unidad}
                 </p>
             </div>

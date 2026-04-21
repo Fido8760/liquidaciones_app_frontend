@@ -63,9 +63,11 @@ export default function DetalleGasto({liquidacion} : DetalleGastoProps) {
                                 onClick={() => navigate("?modalGasto=gasto")}
                             >Agregar Gasto</button>
                             <Link
-                                to={"/tipo-gastos"}
-                                className=" bg-emerald-700 hover:bg-emerald-600 cursor-pointer px-5 py-1 text-white text-sm font-bold transition-colors rounded-lg"
-                            >Administrar Tipos de Gasto</Link>
+                                to={`/tipo-gastos?returnTo=${encodeURIComponent(location.pathname + location.search)}`}
+                                className="bg-emerald-700 hover:bg-emerald-600 cursor-pointer px-5 py-1 text-white text-sm font-bold transition-colors rounded-lg"
+                            >
+                                Administrar Tipos de Gasto
+                            </Link>
                             
                         </div>
                         </>

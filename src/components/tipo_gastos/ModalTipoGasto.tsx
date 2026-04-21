@@ -14,7 +14,7 @@ export default function ModalTipoGasto({ isOpen, onClose, onSubmit, nombre, setN
     return (
         <div className=' fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
             <div className=' bg-white dark:bg-gray-900 rounded-xl shadow-xl p-6 w-full max-w-md mx-4'>
-                <h2 className=' text-lg font-bold text-gray-900 dark:text-white mb-4'>Nueno Tipo de gasto</h2>
+                <h2 className=' text-lg font-bold text-gray-900 dark:text-white mb-4'>Nuevo Tipo de gasto</h2>
                 <div className='mb-4'>
                     <label className=' block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5'>Nombre</label>
                     <input 

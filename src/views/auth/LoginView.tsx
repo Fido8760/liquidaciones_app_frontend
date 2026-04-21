@@ -3,50 +3,53 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { UserLoginForm } from "../../types";
 import ErrorMessage from "../../components/ErrorMessage";
-import { authenticateUser } from "../../api/auth/AuthApi";
+import { authenticateUser, getUser } from "../../api/auth/AuthApi";
 import { toast } from "react-toastify";
 
 export default function LoginView() {
-
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const initialValues: UserLoginForm = {
         email: '',
         password: ''
-    }
+    };
 
-    const { register, handleSubmit, formState: { errors }} = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: initialValues
-    })
+    });
 
-    const { mutate, isPending} = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: authenticateUser,
         onError: (error) => {
-            toast.error(error.message)
+            toast.error(error.message);
         },
         onSuccess: async () => {
-            toast.success('Iniciando sesión...')
-            await queryClient.resetQueries({ queryKey: ['auth-user'], exact: true })
-            navigate('/')
+            toast.success('Iniciando sesión...');
+            await queryClient.resetQueries({ queryKey: ['auth-user'], exact: true });
+            const currentUser = await queryClient.fetchQuery({
+                queryKey: ['auth-user'],
+                queryFn: getUser
+            });
+            navigate(currentUser?.rol === 'VENTAS' ? '/programacion-salidas' : '/');
         }
-    })
+    });
 
-    const handleLogin = (formData: UserLoginForm) => mutate(formData)
+    const handleLogin = (formData: UserLoginForm) => mutate(formData);
 
     return (
         <form className=" space-y-6" onSubmit={handleSubmit(handleLogin)}>
             <div>
                 <label htmlFor="email" className=" block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Correo Electrónico</label>
                 <div className=" mt-2">
-                    <input 
-                        type="email"  
-                        id="email" 
-                        autoComplete="email" 
-                        placeholder="Ej. correo@correo.com" 
+                    <input
+                        type="email"
+                        id="email"
+                        autoComplete="email"
+                        placeholder="Ej. correo@correo.com"
                         className={`block w-full rounded-lg border-0 py-2.5 px-4 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.email ? 'ring-red-500 focus:ring-red-500 dark:ring-red-500' : ' ring-gray-300 dark:ring-gray-700 focus:ring-purple-600 dark:focus:ring-purple-500 dark:bg-gray-800'}`}
                         {...register("email", {
-                            required: 'Elcorreo es obligatorio',
+                            required: 'El correo es obligatorio',
                             pattern: {
                                 value: /\S+@\S+\.\S+/,
                                 message: "E-mail no válido",
@@ -56,7 +59,7 @@ export default function LoginView() {
                     {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
                 </div>
             </div>
-            
+
             <div>
                 <div className=" flex items-center justify-between">
                     <label htmlFor="password" className=" block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Contraseña</label>
@@ -65,10 +68,10 @@ export default function LoginView() {
                     </div>
                 </div>
                 <div className=" mt-2">
-                    <input 
-                        type="password" 
-                        id="password" 
-                        autoComplete="current-password" 
+                    <input
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
                         className={`block w-full rounded-lg border-0 py-2.5 px-4 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 transition-all ${errors.password ? 'ring-red-500 focus:ring-red-500 dark:ring-red-500' : ' ring-gray-300 dark:ring-gray-700 focus:ring-purple-600 dark:focus:ring-purple-500 dark:bg-gray-800'}`}
                         {...register("password", {
                             required: 'La contraseña es obligatoria'
@@ -89,7 +92,7 @@ export default function LoginView() {
                         <div className="flex items-center gap-2">
                             <svg className=" animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle className=" opacity-75" cx={"12"} cy={"12"} r={"10"} stroke="currentColor" strokeWidth={"4"}></circle>
-                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
 
                             Iniciando Sesión...
@@ -100,5 +103,5 @@ export default function LoginView() {
                 </button>
             </div>
         </form>
-    )
+    );
 }

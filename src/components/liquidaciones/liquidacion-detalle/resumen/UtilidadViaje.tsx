@@ -12,6 +12,7 @@ export default function UtilidadViaje({ liquidacion }: UtilidadViajeProps) {
     const [showDesgloce, setShowDesgloce] = useState(false);
     const tieneGastoFerry = (liquidacion.gasto_ferry || 0) > 0;
     const gastosEmpresa = (liquidacion.gastos ?? []).filter(g => !g.afecta_operador);
+    const porcentajeUtilidad = liquidacion.total_fletes > 0 ? (liquidacion.utilidad_viaje / liquidacion.total_fletes) * 100 : 0;
     return (
         <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl border-2 border-indigo-400 dark:border-indigo-600 shadow-lg">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -36,6 +37,7 @@ export default function UtilidadViaje({ liquidacion }: UtilidadViajeProps) {
                         } text-2xl sm:text-3xl md:text-4xl`}>
                         {formatCurrency(liquidacion.utilidad_viaje)}
                     </p>
+                    <p className=" text-sm font-medium text-indigo-600 dark:text-indigo-400">{porcentajeUtilidad.toFixed(2)}% de utilidad</p>
                     <button
                         onClick={() => setShowDesgloce(!showDesgloce)}
                         className=" mt-1 flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors ml-auto"
