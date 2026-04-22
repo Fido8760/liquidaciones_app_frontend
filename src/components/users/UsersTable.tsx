@@ -10,12 +10,12 @@ type UsersTableProps = {
     total: number
 }
 
-// Mapeo de colores para los roles
 const roleStyles: Record<string, string> = {
     ADMIN: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
     SISTEMAS: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
     DIRECTOR: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
     CAPTURISTA: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+    VENTAS: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400",
 }
 
 export default function UsersTable({ users, total }: UsersTableProps) {
@@ -66,8 +66,48 @@ export default function UsersTable({ users, total }: UsersTableProps) {
                 </span>
             </div>
 
+            {/** Tarjetas */}
+            <div className=" grid grid-cols-1 gap-4 md:hidden">
+                {users.map(user => (
+                    <div className=" bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-4 space-y-3">
+                        <div className=" flex items-center justify-between">
+                            <div>
+                                <p className=" font-semibold text-gray-900 dark:text-white">{user.nombre} {user.apellido}</p>
+                                <p className=" text-xs text-gray-500">{user.id}</p>
+                            </div>
+                            <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${roleStyles[user.rol] || "bg-gray-100 text-gray-700"} `}>
+                                {user.rol}
+                            </span>
+                        </div>
+
+                        <p className=" text-sm text-gray-600 dark:text-gray-300 ">{user.email}</p>
+                        
+                        <div className=" flex items-center justify-between">
+                            <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-medium ${user.activo ? " text-green-700 bg-gray-100 dark:bg-green-900/30 dark:text-green-400" : "text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-400"}`}>
+                                <span className={`h-1.5 w-1.5 rounded-full ${user.activo ? "bg-green-600" : "bg-red-600"}`}></span>
+                                {user.activo ? 'Activo' : 'Inactivo'}
+                            </span>
+
+                            {user.email !== 'soporte@mudanzasamado.mx' && (
+                                <div className=" flex gap-3 text-sm font-medium">
+                                    <Link to={`/usuarios/${user.id}/editar`} className=" text-purple-600 hover:text-purple-900 dark:text-purple-400">
+                                        Editar
+                                    </Link>
+                                    <button
+                                        className={user.activo ? "text-red-600 hover:text-red-900" : "text-green-600 hover:text-green-900"}
+                                        onClick={() => handleChangeUserState(user)}
+                                    >
+                                        {user.activo ? "Desactivar" : "Activar"}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}                
+            </div>
+
             {/* Tabla */}
-            <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
+            <div className="hidden md:block overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead className="bg-gray-50 dark:bg-gray-800">

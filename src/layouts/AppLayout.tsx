@@ -43,9 +43,7 @@ export default function AppLayout() {
     }, [isError]);
 
     if (isLoading) {
-        return (
-            <LoadingSpinner mensaje="Verificando las credenciales..." />
-        );
+        return <LoadingSpinner fullScreen mensaje="Verificando las credenciales..." />
     }
 
     if (isError) {
@@ -138,7 +136,7 @@ export default function AppLayout() {
                         {mostrarInicio && <CustomNavLink to="/" onClick={closeMenu} end>Inicio</CustomNavLink>}
                         {mostrarOperadores && <CustomNavLink to="/operadores" onClick={closeMenu}>Operadores</CustomNavLink>}
                         {mostrarLiquidaciones && <CustomNavLink to="/liquidaciones" onClick={closeMenu}>Liquidaciones</CustomNavLink>}
-                        {user.rol === 'SISTEMAS' && <CustomNavLink to="/usuarios">Usuarios</CustomNavLink>}
+                        {user.rol === 'SISTEMAS' && <CustomNavLink to="/usuarios" onClick={closeMenu}>Usuarios</CustomNavLink>}
                         {mostrarProgramacion && <CustomNavLink to="/programacion-salidas" onClick={closeMenu} end>Programación Salidas</CustomNavLink>}
 
                         <li className="pt-2 mt-2 border-t border-gray-100 dark:border-gray-800">
