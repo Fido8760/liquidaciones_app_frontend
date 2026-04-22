@@ -2,7 +2,7 @@ import { ArrowTrendingDownIcon, ArrowTrendingUpIcon, BuildingOfficeIcon, Calenda
 import type { Liquidacion } from "../../../../types"
 import { calcularDiasViaje } from "../../../../utils/calcularDiasViaje"
 import InfoItem from "../InfoItem"
-import { formatDateOnly, formatDateTime } from "../../../../utils/formatDate"
+import { formatDateOnly } from "../../../../utils/formatDate"
 import { formatCurrency } from "../../../../utils/formatCurrency"
 
 type InformacionViajeProps = {
