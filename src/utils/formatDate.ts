@@ -12,10 +12,14 @@ export function formatDate(isoString: string) {
 export function formatDateTime(input: Date | string) {
     if (!input) return '';
 
-    // Asegura que se interprete como UTC si no tiene zona horaria
-    const str = typeof input === 'string' && !input.endsWith('Z') && !input.includes('+')
-        ? input + 'Z'
+    // Normaliza el formato: reemplaza espacio por T y agrega Z si no tiene zona horaria
+    let str = typeof input === 'string'
+        ? input.replace(' ', 'T')
         : input;
+
+    if (typeof str === 'string' && !str.endsWith('Z') && !str.includes('+')) {
+        str = str + 'Z';
+    }
 
     const date = new Date(str);
 
