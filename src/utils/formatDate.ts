@@ -12,7 +12,6 @@ export function formatDate(isoString: string) {
 export function formatDateTime(input: Date | string) {
     if (!input) return '';
 
-    // Solo normaliza el espacio entre fecha y hora, sin agregar zona horaria
     const str = typeof input === 'string'
         ? input.replace(' ', 'T')
         : input;
