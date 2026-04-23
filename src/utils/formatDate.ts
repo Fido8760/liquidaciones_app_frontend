@@ -12,7 +12,12 @@ export function formatDate(isoString: string) {
 export function formatDateTime(input: Date | string) {
     if (!input) return '';
 
-    const date = new Date(input);
+    // Quita la Z para que no lo interprete como UTC
+    const str = typeof input === 'string'
+        ? input.replace('Z', '').replace('T', ' ')
+        : input;
+
+    const date = new Date(str);
 
     if (isNaN(date.getTime())) {
         console.error('Fecha inválida:', input);
@@ -26,10 +31,8 @@ export function formatDateTime(input: Date | string) {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
-        timeZone: 'America/Mexico_City',
     }).format(date);
 }
-
 export function formatDateOnly(dateString: string, weekday = false) {
     const [year, month, day] = dateString.split('-');
 
