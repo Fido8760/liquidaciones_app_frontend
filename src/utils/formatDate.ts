@@ -12,14 +12,10 @@ export function formatDate(isoString: string) {
 export function formatDateTime(input: Date | string) {
     if (!input) return '';
 
-    // Normaliza el formato: reemplaza espacio por T y agrega Z si no tiene zona horaria
-    let str = typeof input === 'string'
+    // Solo normaliza el espacio entre fecha y hora, sin agregar zona horaria
+    const str = typeof input === 'string'
         ? input.replace(' ', 'T')
         : input;
-
-    if (typeof str === 'string' && !str.endsWith('Z') && !str.includes('+')) {
-        str = str + 'Z';
-    }
 
     const date = new Date(str);
 
@@ -35,7 +31,6 @@ export function formatDateTime(input: Date | string) {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
-        timeZone: 'America/Mexico_City',
     }).format(date);
 }
 
