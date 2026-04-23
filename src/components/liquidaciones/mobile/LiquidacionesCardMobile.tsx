@@ -14,7 +14,7 @@ type LiquidacionCardMobileProps = {
 }
 
 export default function LiquidacionCardMobile({ liquidacion }: LiquidacionCardMobileProps) {
-    const timeAgo = formatDistanceToNow(new Date(liquidacion.updatedAt), { 
+    const timeAgo = formatDistanceToNow(new Date(liquidacion.updatedAt.replace('Z', '').replace('T', ' ')), { 
         addSuffix: true, 
         locale: es 
     });
@@ -88,7 +88,7 @@ export default function LiquidacionCardMobile({ liquidacion }: LiquidacionCardMo
                 {/* Última actualización */}
                 <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 pt-1">
                     <ClockIcon className="w-3 h-3 flex-shrink-0" />
-                    <span>{timeAgo}</span>
+                    <span>Actualizado: {timeAgo}</span>
                 </div>
             </div>
         </Link>
