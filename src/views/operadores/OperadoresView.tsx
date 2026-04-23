@@ -17,7 +17,7 @@ export default function OperadoresView() {
         staleTime: 1000 * 600 * 5 
     });
 
-    if(isLoading) return <LoadingSpinner mensaje="Cargando Operadores..." />
+    if(isLoading) return <LoadingSpinner fullScreen mensaje="Cargando Operadores..." />
     if(isError) return <ErrorQuery mensaje="Error al cargar los operadores." />
 
     if(operadoresData) return (

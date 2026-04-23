@@ -161,7 +161,7 @@ export default function ProgramacionSalidasView() {
 
     const salidaSeleccionada = salidasHoy?.find(s => s.id === salidaId);
 
-    if (isLoading) return <LoadingSpinner mensaje="Cargando programación del día..." />;
+    if (isLoading) return <LoadingSpinner fullScreen mensaje="Cargando programación del día..." />;
     if (isError) return <ErrorQuery mensaje="Error al cargar la programación del día." />;
 
     if (!salidasHoy) return null;

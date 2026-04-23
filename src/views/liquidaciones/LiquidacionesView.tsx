@@ -27,7 +27,7 @@ export default function LiquidacionesView() {
     })
     
 
-    if (isLoading) return <LoadingSpinner mensaje="Cargando liquidaciones..." />
+    if (isLoading) return <LoadingSpinner fullScreen mensaje="Cargando liquidaciones..." />
     if (isError) return <ErrorQuery mensaje="Error al cargar las liquidaciones." />
     if(data) return (
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">

@@ -40,7 +40,7 @@ export default function DashboardView() {
 
     if (user?.rol === 'VENTAS') return <Navigate to="/programacion-salidas" replace />;
 
-    if (isLoading) return <LoadingSpinner mensaje="Cargando liquidaciones..."/>
+    if (isLoading) return <LoadingSpinner fullScreen mensaje="Cargando liquidaciones..."/>
 
     if (isError) return <ErrorQuery mensaje="No se pudieron cargar las liquidaciones." onRetry={() => window.location.reload()} />
     
