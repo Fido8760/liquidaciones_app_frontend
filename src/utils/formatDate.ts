@@ -12,11 +12,7 @@ export function formatDate(isoString: string) {
 export function formatDateTime(input: Date | string) {
     if (!input) return '';
 
-    const str = typeof input === 'string'
-        ? input.replace(' ', 'T')
-        : input;
-
-    const date = new Date(str);
+    const date = new Date(input);
 
     if (isNaN(date.getTime())) {
         console.error('Fecha inválida:', input);
@@ -30,6 +26,7 @@ export function formatDateTime(input: Date | string) {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
+        timeZone: 'America/Mexico_City',
     }).format(date);
 }
 
