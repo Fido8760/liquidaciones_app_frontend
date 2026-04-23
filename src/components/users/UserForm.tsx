@@ -66,6 +66,7 @@ export default function UserForm({ register, errors, watch, isEdit }: UserFormRe
                             required: "El rol es obligatorio"
                         })}>
                             <option value="CAPTURISTA">Capturista</option>
+                            <option value="VENTAS">Ventas</option>
                             <option value="ADMIN">Administrador</option>
                             <option value="DIRECTOR">Director</option>
                             <option value="SISTEMAS">Sistemas</option>
