@@ -79,13 +79,19 @@ export default function ProgramacionTable({ salidas, onEditar, modoHistorico, on
                                     <td className="px-6 py-4">
                                         {salida.unidad ? (
                                             <>
-                                                <p className="font-medium text-gray-900 dark:text-white">{salida.unidad.no_unidad}</p>
-                                                <p className="text-xs text-gray-500">{salida.unidad.u_placas}</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">
+                                                    {salida.unidad.no_unidad}
+                                                </p>
+                                                <p className="text-xs text-gray-500">
+                                                    {salida.unidad.u_placas}
+                                                </p>
                                             </>
-                                        ) : (
-                                            (modoHistorico && user?.rol !== 'SISTEMAS') ? (
-                                                <span className="text-sm font-semibold text-red-500 italic">Sin asignar</span>
                                             ) : (
+                                                (modoHistorico && user?.rol !== 'SISTEMAS') || user?.rol === 'VENTAS' ? (
+                                                    <span className="text-sm font-semibold text-red-500 italic">
+                                                        Sin asignar
+                                                    </span>
+                                                ) : (
                                                 <button
                                                     onClick={() => onAsignar?.(salida.id)}
                                                     className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm"

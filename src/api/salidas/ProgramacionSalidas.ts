@@ -137,6 +137,22 @@ export async function eliminarProgramacion(id: number) {
     }
 }
 
+type AsignarUnidadForm = {
+  unidadId: number;
+};
+
+export async function asignarUnidad({ id, dto, }: { id: number; dto: AsignarUnidadForm; }): Promise<ProgramacionSalida> {
+  try {
+    const { data } = await api.patch( `/programacion-salidas/${id}/asignar-unidad`, dto );
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error('Error desconocido');
+  }
+}
+
 function buildQueryString(filters: ProgramacionHistoricoFilters = {}) {
     const params = new URLSearchParams();
 
