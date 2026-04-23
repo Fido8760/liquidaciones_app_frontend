@@ -12,7 +12,12 @@ export function formatDate(isoString: string) {
 export function formatDateTime(input: Date | string) {
     if (!input) return '';
 
-    const date = new Date(input);
+    // Asegura que se interprete como UTC si no tiene zona horaria
+    const str = typeof input === 'string' && !input.endsWith('Z') && !input.includes('+')
+        ? input + 'Z'
+        : input;
+
+    const date = new Date(str);
 
     if (isNaN(date.getTime())) {
         console.error('Fecha inválida:', input);
@@ -25,7 +30,8 @@ export function formatDateTime(input: Date | string) {
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: false, // formato 24h (más común en MX en sistemas)
+        hour12: false,
+        timeZone: 'America/Mexico_City',
     }).format(date);
 }
 
