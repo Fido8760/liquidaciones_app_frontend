@@ -295,18 +295,27 @@ export const kpiUnidadSchema = z.object({
     monto_pagado: z.string().transform(Number),
 })
 
-export const kpisOperadorSchema = z.object({
+export const kpiTipoUnidadSchema = z.object({
+    tipo_unidad: z.string(),
     total_viajes: z.number(),
     rendimiento_real_promedio: z.number(),
     rendimiento_tabulado_promedio: z.number(),
     diferencia_promedio: z.number(),
+    kilometros_totales: z.number(),
+})
+
+export const kpisOperadorSchema = z.object({
+    total_viajes: z.number(),
+    rendimiento_real_promedio: z.number(),
     comision_total: z.number(),
     monto_pagado_total: z.number(),
     kilometros_totales: z.number(),
     unidades: z.array(kpiUnidadSchema),
+    rendimiento_por_tipo_unidad: z.array(kpiTipoUnidadSchema),
 })
 
 export type KpiUnidad = z.infer<typeof kpiUnidadSchema>
+export type KpiTipoUnidad = z.infer<typeof kpiTipoUnidadSchema>
 export type KpisOperador = z.infer<typeof kpisOperadorSchema>
 
 // ═══════════════════════════════════════════════════
