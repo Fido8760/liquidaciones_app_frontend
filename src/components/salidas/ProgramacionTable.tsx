@@ -159,21 +159,20 @@ export default function ProgramacionTable({ salidas, onEditar, modoHistorico, on
                                             </div>
                                         )}
                                     </td>
-
                                     <td className="px-6 py-4 text-right text-sm font-medium">
                                         <div className="flex justify-end gap-3">
                                             {(!modoHistorico || user?.rol === 'SISTEMAS') && (
                                                 <>
                                                     <button
                                                         onClick={() => onEditar?.(salida.id)}
-                                                        disabled={salida.estatus === 'CANCELADO'}
+                                                        disabled={salida.estatus === 'CANCELADO' || salida.estatus === 'SALIO'}
                                                         className="text-blue-600 hover:text-blue-900 disabled:opacity-40"
                                                     >
                                                         Editar
                                                     </button>
                                                     <button
                                                         onClick={() => onCancelar?.(salida.id)}
-                                                        disabled={salida.estatus === 'CANCELADO'}
+                                                        disabled={salida.estatus === 'CANCELADO' || salida.estatus === 'SALIO'}
                                                         className="text-amber-600 hover:text-amber-900 disabled:opacity-40"
                                                     >
                                                         Cancelar

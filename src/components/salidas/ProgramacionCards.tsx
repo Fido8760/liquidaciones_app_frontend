@@ -102,6 +102,14 @@ export default function ProgramacionCards({ salidas, onEditar, onAsignar, onElim
                             </div>
                         </div>
 
+                        {/* OBSERVACIONES */}
+                        {salida.observaciones && (
+                            <div className="mb-3 bg-gray-50 dark:bg-gray-800 rounded-lg p-2">
+                                <p className="text-[10px] uppercase text-gray-400 font-bold mb-1">Observaciones</p>
+                                <p className="text-xs text-gray-600 dark:text-gray-300">{salida.observaciones}</p>
+                            </div>
+                        )}
+
                         {/* FOOTER: USUARIOS Y ACCIONES */}
                         <div className="flex justify-between items-end pt-3 border-t border-gray-100 dark:border-gray-700">
                             <div className="text-[11px]">
@@ -121,12 +129,12 @@ export default function ProgramacionCards({ salidas, onEditar, onAsignar, onElim
                                     <>
                                         <button 
                                             onClick={() => onEditar?.(salida.id)}
-                                            disabled={salida.estatus === 'CANCELADO'}
+                                            disabled={salida.estatus === 'CANCELADO' || salida.estatus === 'SALIO'}
                                             className="text-blue-600 disabled:opacity-30"
                                         >Editar</button>
                                         <button 
                                             onClick={() => onCancelar?.(salida.id)}
-                                            disabled={salida.estatus === 'CANCELADO'}
+                                            disabled={salida.estatus === 'CANCELADO' || salida.estatus === 'SALIO'}
                                             className="text-amber-600 disabled:opacity-30"
                                         >Cancelar</button>
                                     </>
